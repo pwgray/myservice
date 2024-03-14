@@ -11,12 +11,39 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { StringFilter } from "../../util/StringFilter";
+import { AnswerListRelationFilter } from "../../answer/base/AnswerListRelationFilter";
+import { ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
-import { IsOptional } from "class-validator";
+import { StringNullableFilter } from "../../util/StringNullableFilter";
+import { StringFilter } from "../../util/StringFilter";
+import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
+import { QuestionnaireWhereUniqueInput } from "../../questionnaire/base/QuestionnaireWhereUniqueInput";
 
 @InputType()
 class QuestionWhereInput {
+  @ApiProperty({
+    required: false,
+    type: () => AnswerListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => AnswerListRelationFilter)
+  @IsOptional()
+  @Field(() => AnswerListRelationFilter, {
+    nullable: true,
+  })
+  answers?: AnswerListRelationFilter;
+
+  @ApiProperty({
+    required: false,
+    type: StringNullableFilter,
+  })
+  @Type(() => StringNullableFilter)
+  @IsOptional()
+  @Field(() => StringNullableFilter, {
+    nullable: true,
+  })
+  description?: StringNullableFilter;
+
   @ApiProperty({
     required: false,
     type: StringFilter,
@@ -27,6 +54,52 @@ class QuestionWhereInput {
     nullable: true,
   })
   id?: StringFilter;
+
+  @ApiProperty({
+    required: false,
+    type: StringNullableFilter,
+  })
+  @Type(() => StringNullableFilter)
+  @IsOptional()
+  @Field(() => StringNullableFilter, {
+    nullable: true,
+  })
+  name?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => UserWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => UserWhereUniqueInput)
+  @IsOptional()
+  @Field(() => UserWhereUniqueInput, {
+    nullable: true,
+  })
+  owner?: UserWhereUniqueInput;
+
+  @ApiProperty({
+    required: false,
+    type: () => QuestionnaireWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => QuestionnaireWhereUniqueInput)
+  @IsOptional()
+  @Field(() => QuestionnaireWhereUniqueInput, {
+    nullable: true,
+  })
+  questionnaire?: QuestionnaireWhereUniqueInput;
+
+  @ApiProperty({
+    required: false,
+    type: StringNullableFilter,
+  })
+  @Type(() => StringNullableFilter)
+  @IsOptional()
+  @Field(() => StringNullableFilter, {
+    nullable: true,
+  })
+  text?: StringNullableFilter;
 }
 
 export { QuestionWhereInput as QuestionWhereInput };

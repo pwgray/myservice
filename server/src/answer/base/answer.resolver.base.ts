@@ -18,11 +18,15 @@ import * as gqlACGuard from "../../auth/gqlAC.guard";
 import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
 import * as common from "@nestjs/common";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { Answer } from "./Answer";
 import { AnswerCountArgs } from "./AnswerCountArgs";
 import { AnswerFindManyArgs } from "./AnswerFindManyArgs";
 import { AnswerFindUniqueArgs } from "./AnswerFindUniqueArgs";
+import { CreateAnswerArgs } from "./CreateAnswerArgs";
+import { UpdateAnswerArgs } from "./UpdateAnswerArgs";
 import { DeleteAnswerArgs } from "./DeleteAnswerArgs";
+import { Question } from "../../question/base/Question";
 import { AnswerService } from "../answer.service";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Answer)
@@ -75,6 +79,61 @@ export class AnswerResolverBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
+  @graphql.Mutation(() => Answer)
+  @nestAccessControl.UseRoles({
+    resource: "Answer",
+    action: "create",
+    possession: "any",
+  })
+  async createAnswer(@graphql.Args() args: CreateAnswerArgs): Promise<Answer> {
+    return await this.service.createAnswer({
+      ...args,
+      data: {
+        ...args.data,
+
+        question: args.data.question
+          ? {
+              connect: args.data.question,
+            }
+          : undefined,
+      },
+    });
+  }
+
+  @common.UseInterceptors(AclValidateRequestInterceptor)
+  @graphql.Mutation(() => Answer)
+  @nestAccessControl.UseRoles({
+    resource: "Answer",
+    action: "update",
+    possession: "any",
+  })
+  async updateAnswer(
+    @graphql.Args() args: UpdateAnswerArgs
+  ): Promise<Answer | null> {
+    try {
+      return await this.service.updateAnswer({
+        ...args,
+        data: {
+          ...args.data,
+
+          question: args.data.question
+            ? {
+                connect: args.data.question,
+              }
+            : undefined,
+        },
+      });
+    } catch (error) {
+      if (isRecordNotFoundError(error)) {
+        throw new GraphQLError(
+          `No resource was found for ${JSON.stringify(args.where)}`
+        );
+      }
+      throw error;
+    }
+  }
+
   @graphql.Mutation(() => Answer)
   @nestAccessControl.UseRoles({
     resource: "Answer",
@@ -94,5 +153,26 @@ export class AnswerResolverBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => Question, {
+    nullable: true,
+    name: "question",
+  })
+  @nestAccessControl.UseRoles({
+    resource: "Question",
+    action: "read",
+    possession: "any",
+  })
+  async getQuestion(
+    @graphql.Parent() parent: Answer
+  ): Promise<Question | null> {
+    const result = await this.service.getQuestion(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
   }
 }

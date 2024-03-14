@@ -26,6 +26,9 @@ import { Question } from "./Question";
 import { QuestionFindManyArgs } from "./QuestionFindManyArgs";
 import { QuestionWhereUniqueInput } from "./QuestionWhereUniqueInput";
 import { QuestionUpdateInput } from "./QuestionUpdateInput";
+import { AnswerFindManyArgs } from "../../answer/base/AnswerFindManyArgs";
+import { Answer } from "../../answer/base/Answer";
+import { AnswerWhereUniqueInput } from "../../answer/base/AnswerWhereUniqueInput";
 
 @swagger.ApiBearerAuth()
 @common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
@@ -49,10 +52,40 @@ export class QuestionControllerBase {
     @common.Body() data: QuestionCreateInput
   ): Promise<Question> {
     return await this.service.createQuestion({
-      data: data,
+      data: {
+        ...data,
+
+        owner: data.owner
+          ? {
+              connect: data.owner,
+            }
+          : undefined,
+
+        questionnaire: data.questionnaire
+          ? {
+              connect: data.questionnaire,
+            }
+          : undefined,
+      },
       select: {
         createdAt: true,
+        description: true,
         id: true,
+        name: true,
+
+        owner: {
+          select: {
+            id: true,
+          },
+        },
+
+        questionnaire: {
+          select: {
+            id: true,
+          },
+        },
+
+        text: true,
         updatedAt: true,
       },
     });
@@ -76,7 +109,23 @@ export class QuestionControllerBase {
       ...args,
       select: {
         createdAt: true,
+        description: true,
         id: true,
+        name: true,
+
+        owner: {
+          select: {
+            id: true,
+          },
+        },
+
+        questionnaire: {
+          select: {
+            id: true,
+          },
+        },
+
+        text: true,
         updatedAt: true,
       },
     });
@@ -101,7 +150,23 @@ export class QuestionControllerBase {
       where: params,
       select: {
         createdAt: true,
+        description: true,
         id: true,
+        name: true,
+
+        owner: {
+          select: {
+            id: true,
+          },
+        },
+
+        questionnaire: {
+          select: {
+            id: true,
+          },
+        },
+
+        text: true,
         updatedAt: true,
       },
     });
@@ -132,10 +197,40 @@ export class QuestionControllerBase {
     try {
       return await this.service.updateQuestion({
         where: params,
-        data: data,
+        data: {
+          ...data,
+
+          owner: data.owner
+            ? {
+                connect: data.owner,
+              }
+            : undefined,
+
+          questionnaire: data.questionnaire
+            ? {
+                connect: data.questionnaire,
+              }
+            : undefined,
+        },
         select: {
           createdAt: true,
+          description: true,
           id: true,
+          name: true,
+
+          owner: {
+            select: {
+              id: true,
+            },
+          },
+
+          questionnaire: {
+            select: {
+              id: true,
+            },
+          },
+
+          text: true,
           updatedAt: true,
         },
       });
@@ -168,7 +263,23 @@ export class QuestionControllerBase {
         where: params,
         select: {
           createdAt: true,
+          description: true,
           id: true,
+          name: true,
+
+          owner: {
+            select: {
+              id: true,
+            },
+          },
+
+          questionnaire: {
+            select: {
+              id: true,
+            },
+          },
+
+          text: true,
           updatedAt: true,
         },
       });
@@ -180,5 +291,107 @@ export class QuestionControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @common.Get("/:id/answers")
+  @ApiNestedQuery(AnswerFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "Answer",
+    action: "read",
+    possession: "any",
+  })
+  async findAnswers(
+    @common.Req() request: Request,
+    @common.Param() params: QuestionWhereUniqueInput
+  ): Promise<Answer[]> {
+    const query = plainToClass(AnswerFindManyArgs, request.query);
+    const results = await this.service.findAnswers(params.id, {
+      ...query,
+      select: {
+        createdAt: true,
+        id: true,
+
+        question: {
+          select: {
+            id: true,
+          },
+        },
+
+        updatedAt: true,
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results;
+  }
+
+  @common.Post("/:id/answers")
+  @nestAccessControl.UseRoles({
+    resource: "Question",
+    action: "update",
+    possession: "any",
+  })
+  async connectAnswers(
+    @common.Param() params: QuestionWhereUniqueInput,
+    @common.Body() body: AnswerWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      answers: {
+        connect: body,
+      },
+    };
+    await this.service.updateQuestion({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Patch("/:id/answers")
+  @nestAccessControl.UseRoles({
+    resource: "Question",
+    action: "update",
+    possession: "any",
+  })
+  async updateAnswers(
+    @common.Param() params: QuestionWhereUniqueInput,
+    @common.Body() body: AnswerWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      answers: {
+        set: body,
+      },
+    };
+    await this.service.updateQuestion({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Delete("/:id/answers")
+  @nestAccessControl.UseRoles({
+    resource: "Question",
+    action: "update",
+    possession: "any",
+  })
+  async disconnectAnswers(
+    @common.Param() params: QuestionWhereUniqueInput,
+    @common.Body() body: AnswerWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      answers: {
+        disconnect: body,
+      },
+    };
+    await this.service.updateQuestion({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 }

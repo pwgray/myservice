@@ -9,5 +9,25 @@ https://docs.amplication.com/how-to/custom-code
 
 ------------------------------------------------------------------------------
   */
-class ApplicationCreateInput {}
+import { InputType, Field } from "@nestjs/graphql";
+import { ApiProperty } from "@nestjs/swagger";
+import { QuestionnaireCreateNestedManyWithoutApplicationsInput } from "./QuestionnaireCreateNestedManyWithoutApplicationsInput";
+import { ValidateNested, IsOptional } from "class-validator";
+import { Type } from "class-transformer";
+
+@InputType()
+class ApplicationCreateInput {
+  @ApiProperty({
+    required: false,
+    type: () => QuestionnaireCreateNestedManyWithoutApplicationsInput,
+  })
+  @ValidateNested()
+  @Type(() => QuestionnaireCreateNestedManyWithoutApplicationsInput)
+  @IsOptional()
+  @Field(() => QuestionnaireCreateNestedManyWithoutApplicationsInput, {
+    nullable: true,
+  })
+  questionnaires?: QuestionnaireCreateNestedManyWithoutApplicationsInput;
+}
+
 export { ApplicationCreateInput as ApplicationCreateInput };

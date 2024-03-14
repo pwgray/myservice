@@ -26,6 +26,9 @@ import { Application } from "./Application";
 import { ApplicationFindManyArgs } from "./ApplicationFindManyArgs";
 import { ApplicationWhereUniqueInput } from "./ApplicationWhereUniqueInput";
 import { ApplicationUpdateInput } from "./ApplicationUpdateInput";
+import { QuestionnaireFindManyArgs } from "../../questionnaire/base/QuestionnaireFindManyArgs";
+import { Questionnaire } from "../../questionnaire/base/Questionnaire";
+import { QuestionnaireWhereUniqueInput } from "../../questionnaire/base/QuestionnaireWhereUniqueInput";
 
 @swagger.ApiBearerAuth()
 @common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
@@ -180,5 +183,107 @@ export class ApplicationControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @common.Get("/:id/questionnaires")
+  @ApiNestedQuery(QuestionnaireFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "Questionnaire",
+    action: "read",
+    possession: "any",
+  })
+  async findQuestionnaires(
+    @common.Req() request: Request,
+    @common.Param() params: ApplicationWhereUniqueInput
+  ): Promise<Questionnaire[]> {
+    const query = plainToClass(QuestionnaireFindManyArgs, request.query);
+    const results = await this.service.findQuestionnaires(params.id, {
+      ...query,
+      select: {
+        application: {
+          select: {
+            id: true,
+          },
+        },
+
+        createdAt: true,
+        id: true,
+        name: true,
+        updatedAt: true,
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results;
+  }
+
+  @common.Post("/:id/questionnaires")
+  @nestAccessControl.UseRoles({
+    resource: "Application",
+    action: "update",
+    possession: "any",
+  })
+  async connectQuestionnaires(
+    @common.Param() params: ApplicationWhereUniqueInput,
+    @common.Body() body: QuestionnaireWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      questionnaires: {
+        connect: body,
+      },
+    };
+    await this.service.updateApplication({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Patch("/:id/questionnaires")
+  @nestAccessControl.UseRoles({
+    resource: "Application",
+    action: "update",
+    possession: "any",
+  })
+  async updateQuestionnaires(
+    @common.Param() params: ApplicationWhereUniqueInput,
+    @common.Body() body: QuestionnaireWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      questionnaires: {
+        set: body,
+      },
+    };
+    await this.service.updateApplication({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Delete("/:id/questionnaires")
+  @nestAccessControl.UseRoles({
+    resource: "Application",
+    action: "update",
+    possession: "any",
+  })
+  async disconnectQuestionnaires(
+    @common.Param() params: ApplicationWhereUniqueInput,
+    @common.Body() body: QuestionnaireWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      questionnaires: {
+        disconnect: body,
+      },
+    };
+    await this.service.updateApplication({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 }

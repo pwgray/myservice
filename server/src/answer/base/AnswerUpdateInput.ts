@@ -9,5 +9,25 @@ https://docs.amplication.com/how-to/custom-code
 
 ------------------------------------------------------------------------------
   */
-class AnswerUpdateInput {}
+import { InputType, Field } from "@nestjs/graphql";
+import { ApiProperty } from "@nestjs/swagger";
+import { QuestionWhereUniqueInput } from "../../question/base/QuestionWhereUniqueInput";
+import { ValidateNested, IsOptional } from "class-validator";
+import { Type } from "class-transformer";
+
+@InputType()
+class AnswerUpdateInput {
+  @ApiProperty({
+    required: false,
+    type: () => QuestionWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => QuestionWhereUniqueInput)
+  @IsOptional()
+  @Field(() => QuestionWhereUniqueInput, {
+    nullable: true,
+  })
+  question?: QuestionWhereUniqueInput | null;
+}
+
 export { AnswerUpdateInput as AnswerUpdateInput };

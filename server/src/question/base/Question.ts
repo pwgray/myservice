@@ -11,11 +11,23 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsString } from "class-validator";
+import { Answer } from "../../answer/base/Answer";
+import { ValidateNested, IsOptional, IsDate, IsString } from "class-validator";
 import { Type } from "class-transformer";
+import { User } from "../../user/base/User";
+import { Questionnaire } from "../../questionnaire/base/Questionnaire";
 
 @ObjectType()
 class Question {
+  @ApiProperty({
+    required: false,
+    type: () => [Answer],
+  })
+  @ValidateNested()
+  @Type(() => Answer)
+  @IsOptional()
+  answers?: Array<Answer>;
+
   @ApiProperty({
     required: true,
   })
@@ -25,12 +37,63 @@ class Question {
   createdAt!: Date;
 
   @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  description!: string | null;
+
+  @ApiProperty({
     required: true,
     type: String,
   })
   @IsString()
   @Field(() => String)
   id!: string;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  name!: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => User,
+  })
+  @ValidateNested()
+  @Type(() => User)
+  @IsOptional()
+  owner?: User | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => Questionnaire,
+  })
+  @ValidateNested()
+  @Type(() => Questionnaire)
+  @IsOptional()
+  questionnaire?: Questionnaire | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  text!: string | null;
 
   @ApiProperty({
     required: true,

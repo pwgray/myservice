@@ -47,10 +47,25 @@ export class AnswerControllerBase {
   })
   async createAnswer(@common.Body() data: AnswerCreateInput): Promise<Answer> {
     return await this.service.createAnswer({
-      data: data,
+      data: {
+        ...data,
+
+        question: data.question
+          ? {
+              connect: data.question,
+            }
+          : undefined,
+      },
       select: {
         createdAt: true,
         id: true,
+
+        question: {
+          select: {
+            id: true,
+          },
+        },
+
         updatedAt: true,
       },
     });
@@ -75,6 +90,13 @@ export class AnswerControllerBase {
       select: {
         createdAt: true,
         id: true,
+
+        question: {
+          select: {
+            id: true,
+          },
+        },
+
         updatedAt: true,
       },
     });
@@ -100,6 +122,13 @@ export class AnswerControllerBase {
       select: {
         createdAt: true,
         id: true,
+
+        question: {
+          select: {
+            id: true,
+          },
+        },
+
         updatedAt: true,
       },
     });
@@ -130,10 +159,25 @@ export class AnswerControllerBase {
     try {
       return await this.service.updateAnswer({
         where: params,
-        data: data,
+        data: {
+          ...data,
+
+          question: data.question
+            ? {
+                connect: data.question,
+              }
+            : undefined,
+        },
         select: {
           createdAt: true,
           id: true,
+
+          question: {
+            select: {
+              id: true,
+            },
+          },
+
           updatedAt: true,
         },
       });
@@ -167,6 +211,13 @@ export class AnswerControllerBase {
         select: {
           createdAt: true,
           id: true,
+
+          question: {
+            select: {
+              id: true,
+            },
+          },
+
           updatedAt: true,
         },
       });
