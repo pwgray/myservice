@@ -13,7 +13,8 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
-import { IsOptional } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
+import { QuestionWhereUniqueInput } from "../../question/base/QuestionWhereUniqueInput";
 
 @InputType()
 class AnswerWhereInput {
@@ -27,6 +28,18 @@ class AnswerWhereInput {
     nullable: true,
   })
   id?: StringFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => QuestionWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => QuestionWhereUniqueInput)
+  @IsOptional()
+  @Field(() => QuestionWhereUniqueInput, {
+    nullable: true,
+  })
+  question?: QuestionWhereUniqueInput;
 }
 
 export { AnswerWhereInput as AnswerWhereInput };

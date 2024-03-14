@@ -18,11 +18,16 @@ import * as gqlACGuard from "../../auth/gqlAC.guard";
 import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
 import * as common from "@nestjs/common";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { Application } from "./Application";
 import { ApplicationCountArgs } from "./ApplicationCountArgs";
 import { ApplicationFindManyArgs } from "./ApplicationFindManyArgs";
 import { ApplicationFindUniqueArgs } from "./ApplicationFindUniqueArgs";
+import { CreateApplicationArgs } from "./CreateApplicationArgs";
+import { UpdateApplicationArgs } from "./UpdateApplicationArgs";
 import { DeleteApplicationArgs } from "./DeleteApplicationArgs";
+import { QuestionnaireFindManyArgs } from "../../questionnaire/base/QuestionnaireFindManyArgs";
+import { Questionnaire } from "../../questionnaire/base/Questionnaire";
 import { ApplicationService } from "../application.service";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Application)
@@ -77,6 +82,47 @@ export class ApplicationResolverBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
+  @graphql.Mutation(() => Application)
+  @nestAccessControl.UseRoles({
+    resource: "Application",
+    action: "create",
+    possession: "any",
+  })
+  async createApplication(
+    @graphql.Args() args: CreateApplicationArgs
+  ): Promise<Application> {
+    return await this.service.createApplication({
+      ...args,
+      data: args.data,
+    });
+  }
+
+  @common.UseInterceptors(AclValidateRequestInterceptor)
+  @graphql.Mutation(() => Application)
+  @nestAccessControl.UseRoles({
+    resource: "Application",
+    action: "update",
+    possession: "any",
+  })
+  async updateApplication(
+    @graphql.Args() args: UpdateApplicationArgs
+  ): Promise<Application | null> {
+    try {
+      return await this.service.updateApplication({
+        ...args,
+        data: args.data,
+      });
+    } catch (error) {
+      if (isRecordNotFoundError(error)) {
+        throw new GraphQLError(
+          `No resource was found for ${JSON.stringify(args.where)}`
+        );
+      }
+      throw error;
+    }
+  }
+
   @graphql.Mutation(() => Application)
   @nestAccessControl.UseRoles({
     resource: "Application",
@@ -96,5 +142,25 @@ export class ApplicationResolverBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => [Questionnaire], { name: "questionnaires" })
+  @nestAccessControl.UseRoles({
+    resource: "Questionnaire",
+    action: "read",
+    possession: "any",
+  })
+  async findQuestionnaires(
+    @graphql.Parent() parent: Application,
+    @graphql.Args() args: QuestionnaireFindManyArgs
+  ): Promise<Questionnaire[]> {
+    const results = await this.service.findQuestionnaires(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
   }
 }

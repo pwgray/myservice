@@ -10,7 +10,14 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, Question } from "@prisma/client";
+
+import {
+  Prisma,
+  Question, // @ts-ignore
+  Answer, // @ts-ignore
+  User, // @ts-ignore
+  Questionnaire,
+} from "@prisma/client";
 
 export class QuestionServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -45,5 +52,32 @@ export class QuestionServiceBase {
     args: Prisma.SelectSubset<T, Prisma.QuestionDeleteArgs>
   ): Promise<Question> {
     return this.prisma.question.delete(args);
+  }
+
+  async findAnswers(
+    parentId: string,
+    args: Prisma.AnswerFindManyArgs
+  ): Promise<Answer[]> {
+    return this.prisma.question
+      .findUniqueOrThrow({
+        where: { id: parentId },
+      })
+      .answers(args);
+  }
+
+  async getOwner(parentId: string): Promise<User | null> {
+    return this.prisma.question
+      .findUnique({
+        where: { id: parentId },
+      })
+      .owner();
+  }
+
+  async getQuestionnaire(parentId: string): Promise<Questionnaire | null> {
+    return this.prisma.question
+      .findUnique({
+        where: { id: parentId },
+      })
+      .questionnaire();
   }
 }

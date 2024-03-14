@@ -26,6 +26,9 @@ import { Questionnaire } from "./Questionnaire";
 import { QuestionnaireFindManyArgs } from "./QuestionnaireFindManyArgs";
 import { QuestionnaireWhereUniqueInput } from "./QuestionnaireWhereUniqueInput";
 import { QuestionnaireUpdateInput } from "./QuestionnaireUpdateInput";
+import { QuestionFindManyArgs } from "../../question/base/QuestionFindManyArgs";
+import { Question } from "../../question/base/Question";
+import { QuestionWhereUniqueInput } from "../../question/base/QuestionWhereUniqueInput";
 
 @swagger.ApiBearerAuth()
 @common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
@@ -49,10 +52,25 @@ export class QuestionnaireControllerBase {
     @common.Body() data: QuestionnaireCreateInput
   ): Promise<Questionnaire> {
     return await this.service.createQuestionnaire({
-      data: data,
+      data: {
+        ...data,
+
+        application: data.application
+          ? {
+              connect: data.application,
+            }
+          : undefined,
+      },
       select: {
+        application: {
+          select: {
+            id: true,
+          },
+        },
+
         createdAt: true,
         id: true,
+        name: true,
         updatedAt: true,
       },
     });
@@ -77,8 +95,15 @@ export class QuestionnaireControllerBase {
     return this.service.questionnaires({
       ...args,
       select: {
+        application: {
+          select: {
+            id: true,
+          },
+        },
+
         createdAt: true,
         id: true,
+        name: true,
         updatedAt: true,
       },
     });
@@ -102,8 +127,15 @@ export class QuestionnaireControllerBase {
     const result = await this.service.questionnaire({
       where: params,
       select: {
+        application: {
+          select: {
+            id: true,
+          },
+        },
+
         createdAt: true,
         id: true,
+        name: true,
         updatedAt: true,
       },
     });
@@ -134,10 +166,25 @@ export class QuestionnaireControllerBase {
     try {
       return await this.service.updateQuestionnaire({
         where: params,
-        data: data,
+        data: {
+          ...data,
+
+          application: data.application
+            ? {
+                connect: data.application,
+              }
+            : undefined,
+        },
         select: {
+          application: {
+            select: {
+              id: true,
+            },
+          },
+
           createdAt: true,
           id: true,
+          name: true,
           updatedAt: true,
         },
       });
@@ -169,8 +216,15 @@ export class QuestionnaireControllerBase {
       return await this.service.deleteQuestionnaire({
         where: params,
         select: {
+          application: {
+            select: {
+              id: true,
+            },
+          },
+
           createdAt: true,
           id: true,
+          name: true,
           updatedAt: true,
         },
       });
@@ -182,5 +236,116 @@ export class QuestionnaireControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @common.Get("/:id/questions")
+  @ApiNestedQuery(QuestionFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "Question",
+    action: "read",
+    possession: "any",
+  })
+  async findQuestions(
+    @common.Req() request: Request,
+    @common.Param() params: QuestionnaireWhereUniqueInput
+  ): Promise<Question[]> {
+    const query = plainToClass(QuestionFindManyArgs, request.query);
+    const results = await this.service.findQuestions(params.id, {
+      ...query,
+      select: {
+        createdAt: true,
+        description: true,
+        id: true,
+        name: true,
+
+        owner: {
+          select: {
+            id: true,
+          },
+        },
+
+        questionnaire: {
+          select: {
+            id: true,
+          },
+        },
+
+        text: true,
+        updatedAt: true,
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results;
+  }
+
+  @common.Post("/:id/questions")
+  @nestAccessControl.UseRoles({
+    resource: "Questionnaire",
+    action: "update",
+    possession: "any",
+  })
+  async connectQuestions(
+    @common.Param() params: QuestionnaireWhereUniqueInput,
+    @common.Body() body: QuestionWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      questions: {
+        connect: body,
+      },
+    };
+    await this.service.updateQuestionnaire({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Patch("/:id/questions")
+  @nestAccessControl.UseRoles({
+    resource: "Questionnaire",
+    action: "update",
+    possession: "any",
+  })
+  async updateQuestions(
+    @common.Param() params: QuestionnaireWhereUniqueInput,
+    @common.Body() body: QuestionWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      questions: {
+        set: body,
+      },
+    };
+    await this.service.updateQuestionnaire({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Delete("/:id/questions")
+  @nestAccessControl.UseRoles({
+    resource: "Questionnaire",
+    action: "update",
+    possession: "any",
+  })
+  async disconnectQuestions(
+    @common.Param() params: QuestionnaireWhereUniqueInput,
+    @common.Body() body: QuestionWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      questions: {
+        disconnect: body,
+      },
+    };
+    await this.service.updateQuestionnaire({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 }

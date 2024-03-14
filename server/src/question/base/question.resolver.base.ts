@@ -18,11 +18,18 @@ import * as gqlACGuard from "../../auth/gqlAC.guard";
 import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
 import * as common from "@nestjs/common";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { Question } from "./Question";
 import { QuestionCountArgs } from "./QuestionCountArgs";
 import { QuestionFindManyArgs } from "./QuestionFindManyArgs";
 import { QuestionFindUniqueArgs } from "./QuestionFindUniqueArgs";
+import { CreateQuestionArgs } from "./CreateQuestionArgs";
+import { UpdateQuestionArgs } from "./UpdateQuestionArgs";
 import { DeleteQuestionArgs } from "./DeleteQuestionArgs";
+import { AnswerFindManyArgs } from "../../answer/base/AnswerFindManyArgs";
+import { Answer } from "../../answer/base/Answer";
+import { User } from "../../user/base/User";
+import { Questionnaire } from "../../questionnaire/base/Questionnaire";
 import { QuestionService } from "../question.service";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Question)
@@ -77,6 +84,75 @@ export class QuestionResolverBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
+  @graphql.Mutation(() => Question)
+  @nestAccessControl.UseRoles({
+    resource: "Question",
+    action: "create",
+    possession: "any",
+  })
+  async createQuestion(
+    @graphql.Args() args: CreateQuestionArgs
+  ): Promise<Question> {
+    return await this.service.createQuestion({
+      ...args,
+      data: {
+        ...args.data,
+
+        owner: args.data.owner
+          ? {
+              connect: args.data.owner,
+            }
+          : undefined,
+
+        questionnaire: args.data.questionnaire
+          ? {
+              connect: args.data.questionnaire,
+            }
+          : undefined,
+      },
+    });
+  }
+
+  @common.UseInterceptors(AclValidateRequestInterceptor)
+  @graphql.Mutation(() => Question)
+  @nestAccessControl.UseRoles({
+    resource: "Question",
+    action: "update",
+    possession: "any",
+  })
+  async updateQuestion(
+    @graphql.Args() args: UpdateQuestionArgs
+  ): Promise<Question | null> {
+    try {
+      return await this.service.updateQuestion({
+        ...args,
+        data: {
+          ...args.data,
+
+          owner: args.data.owner
+            ? {
+                connect: args.data.owner,
+              }
+            : undefined,
+
+          questionnaire: args.data.questionnaire
+            ? {
+                connect: args.data.questionnaire,
+              }
+            : undefined,
+        },
+      });
+    } catch (error) {
+      if (isRecordNotFoundError(error)) {
+        throw new GraphQLError(
+          `No resource was found for ${JSON.stringify(args.where)}`
+        );
+      }
+      throw error;
+    }
+  }
+
   @graphql.Mutation(() => Question)
   @nestAccessControl.UseRoles({
     resource: "Question",
@@ -96,5 +172,65 @@ export class QuestionResolverBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => [Answer], { name: "answers" })
+  @nestAccessControl.UseRoles({
+    resource: "Answer",
+    action: "read",
+    possession: "any",
+  })
+  async findAnswers(
+    @graphql.Parent() parent: Question,
+    @graphql.Args() args: AnswerFindManyArgs
+  ): Promise<Answer[]> {
+    const results = await this.service.findAnswers(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => User, {
+    nullable: true,
+    name: "owner",
+  })
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "read",
+    possession: "any",
+  })
+  async getOwner(@graphql.Parent() parent: Question): Promise<User | null> {
+    const result = await this.service.getOwner(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => Questionnaire, {
+    nullable: true,
+    name: "questionnaire",
+  })
+  @nestAccessControl.UseRoles({
+    resource: "Questionnaire",
+    action: "read",
+    possession: "any",
+  })
+  async getQuestionnaire(
+    @graphql.Parent() parent: Question
+  ): Promise<Questionnaire | null> {
+    const result = await this.service.getQuestionnaire(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
   }
 }

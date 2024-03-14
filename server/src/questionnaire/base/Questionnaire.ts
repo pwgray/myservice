@@ -11,11 +11,22 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsString } from "class-validator";
+import { Application } from "../../application/base/Application";
+import { ValidateNested, IsOptional, IsDate, IsString } from "class-validator";
 import { Type } from "class-transformer";
+import { Question } from "../../question/base/Question";
 
 @ObjectType()
 class Questionnaire {
+  @ApiProperty({
+    required: false,
+    type: () => Application,
+  })
+  @ValidateNested()
+  @Type(() => Application)
+  @IsOptional()
+  application?: Application | null;
+
   @ApiProperty({
     required: true,
   })
@@ -31,6 +42,26 @@ class Questionnaire {
   @IsString()
   @Field(() => String)
   id!: string;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  name!: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => [Question],
+  })
+  @ValidateNested()
+  @Type(() => Question)
+  @IsOptional()
+  questions?: Array<Question>;
 
   @ApiProperty({
     required: true,

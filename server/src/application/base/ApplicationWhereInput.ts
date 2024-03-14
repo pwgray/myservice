@@ -13,7 +13,8 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
-import { IsOptional } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
+import { QuestionnaireListRelationFilter } from "../../questionnaire/base/QuestionnaireListRelationFilter";
 
 @InputType()
 class ApplicationWhereInput {
@@ -27,6 +28,18 @@ class ApplicationWhereInput {
     nullable: true,
   })
   id?: StringFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => QuestionnaireListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => QuestionnaireListRelationFilter)
+  @IsOptional()
+  @Field(() => QuestionnaireListRelationFilter, {
+    nullable: true,
+  })
+  questionnaires?: QuestionnaireListRelationFilter;
 }
 
 export { ApplicationWhereInput as ApplicationWhereInput };
