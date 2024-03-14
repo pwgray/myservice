@@ -1,5 +1,10 @@
 import { Module } from "@nestjs/common";
 import { UserModule } from "./user/user.module";
+import { QuestionModule } from "./question/question.module";
+import { RiskModule } from "./risk/risk.module";
+import { AnswerModule } from "./answer/answer.module";
+import { QuestionnaireModule } from "./questionnaire/questionnaire.module";
+import { ApplicationModule } from "./application/application.module";
 import { HealthModule } from "./health/health.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { SecretsManagerModule } from "./providers/secrets/secretsManager.module";
@@ -18,6 +23,11 @@ import { AuthModule } from "./auth/auth.module";
     ACLModule,
     AuthModule,
     UserModule,
+    QuestionModule,
+    RiskModule,
+    AnswerModule,
+    QuestionnaireModule,
+    ApplicationModule,
     HealthModule,
     PrismaModule,
     SecretsManagerModule,
