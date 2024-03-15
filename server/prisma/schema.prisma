@@ -34,9 +34,12 @@ model Question {
 }
 
 model Risk {
-  createdAt DateTime @default(now())
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  updatedAt DateTime @updatedAt
+  createdAt      DateTime @default(now())
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  mitigationPlan String?
+  owner          String?
+  summary        String?
+  updatedAt      DateTime @updatedAt
 }
 
 model Answer {
@@ -44,7 +47,9 @@ model Answer {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
   question   Question? @relation(fields: [QuestionId], references: [id])
   QuestionId String?   @db.ObjectId
+  sortOrder  String?
   updatedAt  DateTime  @updatedAt
+  value      String?
 }
 
 model Questionnaire {
@@ -58,8 +63,11 @@ model Questionnaire {
 }
 
 model Application {
+  ait            String?
   createdAt      DateTime        @default(now())
+  description    String?
   id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
   questionnaires Questionnaire[]
   updatedAt      DateTime        @updatedAt
 }

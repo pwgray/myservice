@@ -29,7 +29,9 @@ export const AnswerList = (props: ListProps): React.ReactElement => {
         >
           <TextField source={QUESTION_TITLE_FIELD} />
         </ReferenceField>
+        <TextField label="SortOrder" source="sortOrder" />
         <DateField source="updatedAt" label="Updated At" />
+        <TextField label="Value" source="value" />
       </Datagrid>
     </List>
   );

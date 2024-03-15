@@ -18,10 +18,13 @@ import * as gqlACGuard from "../../auth/gqlAC.guard";
 import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
 import * as common from "@nestjs/common";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { Risk } from "./Risk";
 import { RiskCountArgs } from "./RiskCountArgs";
 import { RiskFindManyArgs } from "./RiskFindManyArgs";
 import { RiskFindUniqueArgs } from "./RiskFindUniqueArgs";
+import { CreateRiskArgs } from "./CreateRiskArgs";
+import { UpdateRiskArgs } from "./UpdateRiskArgs";
 import { DeleteRiskArgs } from "./DeleteRiskArgs";
 import { RiskService } from "../risk.service";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
@@ -71,6 +74,43 @@ export class RiskResolverBase {
       return null;
     }
     return result;
+  }
+
+  @common.UseInterceptors(AclValidateRequestInterceptor)
+  @graphql.Mutation(() => Risk)
+  @nestAccessControl.UseRoles({
+    resource: "Risk",
+    action: "create",
+    possession: "any",
+  })
+  async createRisk(@graphql.Args() args: CreateRiskArgs): Promise<Risk> {
+    return await this.service.createRisk({
+      ...args,
+      data: args.data,
+    });
+  }
+
+  @common.UseInterceptors(AclValidateRequestInterceptor)
+  @graphql.Mutation(() => Risk)
+  @nestAccessControl.UseRoles({
+    resource: "Risk",
+    action: "update",
+    possession: "any",
+  })
+  async updateRisk(@graphql.Args() args: UpdateRiskArgs): Promise<Risk | null> {
+    try {
+      return await this.service.updateRisk({
+        ...args,
+        data: args.data,
+      });
+    } catch (error) {
+      if (isRecordNotFoundError(error)) {
+        throw new GraphQLError(
+          `No resource was found for ${JSON.stringify(args.where)}`
+        );
+      }
+      throw error;
+    }
   }
 
   @graphql.Mutation(() => Risk)

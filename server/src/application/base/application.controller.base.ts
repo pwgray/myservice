@@ -54,8 +54,11 @@ export class ApplicationControllerBase {
     return await this.service.createApplication({
       data: data,
       select: {
+        ait: true,
         createdAt: true,
+        description: true,
         id: true,
+        name: true,
         updatedAt: true,
       },
     });
@@ -78,8 +81,11 @@ export class ApplicationControllerBase {
     return this.service.applications({
       ...args,
       select: {
+        ait: true,
         createdAt: true,
+        description: true,
         id: true,
+        name: true,
         updatedAt: true,
       },
     });
@@ -103,8 +109,11 @@ export class ApplicationControllerBase {
     const result = await this.service.application({
       where: params,
       select: {
+        ait: true,
         createdAt: true,
+        description: true,
         id: true,
+        name: true,
         updatedAt: true,
       },
     });
@@ -137,8 +146,11 @@ export class ApplicationControllerBase {
         where: params,
         data: data,
         select: {
+          ait: true,
           createdAt: true,
+          description: true,
           id: true,
+          name: true,
           updatedAt: true,
         },
       });
@@ -170,8 +182,11 @@ export class ApplicationControllerBase {
       return await this.service.deleteApplication({
         where: params,
         select: {
+          ait: true,
           createdAt: true,
+          description: true,
           id: true,
+          name: true,
           updatedAt: true,
         },
       });

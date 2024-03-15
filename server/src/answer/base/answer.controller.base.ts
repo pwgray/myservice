@@ -66,7 +66,9 @@ export class AnswerControllerBase {
           },
         },
 
+        sortOrder: true,
         updatedAt: true,
+        value: true,
       },
     });
   }
@@ -97,7 +99,9 @@ export class AnswerControllerBase {
           },
         },
 
+        sortOrder: true,
         updatedAt: true,
+        value: true,
       },
     });
   }
@@ -129,7 +133,9 @@ export class AnswerControllerBase {
           },
         },
 
+        sortOrder: true,
         updatedAt: true,
+        value: true,
       },
     });
     if (result === null) {
@@ -178,7 +184,9 @@ export class AnswerControllerBase {
             },
           },
 
+          sortOrder: true,
           updatedAt: true,
+          value: true,
         },
       });
     } catch (error) {
@@ -218,7 +226,9 @@ export class AnswerControllerBase {
             },
           },
 
+          sortOrder: true,
           updatedAt: true,
+          value: true,
         },
       });
     } catch (error) {

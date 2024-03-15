@@ -1,7 +1,7 @@
 import { Risk as TRisk } from "../api/risk/Risk";
 
-export const RISK_TITLE_FIELD = "id";
+export const RISK_TITLE_FIELD = "mitigationPlan";
 
 export const RiskTitle = (record: TRisk): string => {
-  return record.id?.toString() || String(record.id);
+  return record.mitigationPlan?.toString() || String(record.id);
 };

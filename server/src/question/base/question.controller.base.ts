@@ -318,7 +318,9 @@ export class QuestionControllerBase {
           },
         },
 
+        sortOrder: true,
         updatedAt: true,
+        value: true,
       },
     });
     if (results === null) {
