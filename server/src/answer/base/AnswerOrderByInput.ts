@@ -61,7 +61,29 @@ class AnswerOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
+  sortOrder?: SortOrder;
+
+  @ApiProperty({
+    required: false,
+    enum: ["asc", "desc"],
+  })
+  @IsOptional()
+  @IsEnum(SortOrder)
+  @Field(() => SortOrder, {
+    nullable: true,
+  })
   updatedAt?: SortOrder;
+
+  @ApiProperty({
+    required: false,
+    enum: ["asc", "desc"],
+  })
+  @IsOptional()
+  @IsEnum(SortOrder)
+  @Field(() => SortOrder, {
+    nullable: true,
+  })
+  value?: SortOrder;
 }
 
 export { AnswerOrderByInput as AnswerOrderByInput };

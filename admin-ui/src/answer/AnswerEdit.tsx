@@ -5,6 +5,7 @@ import {
   EditProps,
   ReferenceInput,
   SelectInput,
+  TextInput,
 } from "react-admin";
 import { QuestionTitle } from "../question/QuestionTitle";
 
@@ -19,6 +20,8 @@ export const AnswerEdit = (props: EditProps): React.ReactElement => {
         >
           <SelectInput optionText={QuestionTitle} />
         </ReferenceInput>
+        <TextInput label="SortOrder" source="sortOrder" />
+        <TextInput label="Value" source="value" />
       </SimpleForm>
     </Edit>
   );

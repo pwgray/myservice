@@ -51,6 +51,9 @@ export class RiskControllerBase {
       select: {
         createdAt: true,
         id: true,
+        mitigationPlan: true,
+        owner: true,
+        summary: true,
         updatedAt: true,
       },
     });
@@ -75,6 +78,9 @@ export class RiskControllerBase {
       select: {
         createdAt: true,
         id: true,
+        mitigationPlan: true,
+        owner: true,
+        summary: true,
         updatedAt: true,
       },
     });
@@ -100,6 +106,9 @@ export class RiskControllerBase {
       select: {
         createdAt: true,
         id: true,
+        mitigationPlan: true,
+        owner: true,
+        summary: true,
         updatedAt: true,
       },
     });
@@ -134,6 +143,9 @@ export class RiskControllerBase {
         select: {
           createdAt: true,
           id: true,
+          mitigationPlan: true,
+          owner: true,
+          summary: true,
           updatedAt: true,
         },
       });
@@ -167,6 +179,9 @@ export class RiskControllerBase {
         select: {
           createdAt: true,
           id: true,
+          mitigationPlan: true,
+          owner: true,
+          summary: true,
           updatedAt: true,
         },
       });

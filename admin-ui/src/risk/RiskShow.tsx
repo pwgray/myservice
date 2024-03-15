@@ -13,6 +13,9 @@ export const RiskShow = (props: ShowProps): React.ReactElement => {
       <SimpleShowLayout>
         <DateField source="createdAt" label="Created At" />
         <TextField label="ID" source="id" />
+        <TextField label="MitigationPlan" source="mitigationPlan" />
+        <TextField label="Owner" source="owner" />
+        <TextField label="Summary" source="summary" />
         <DateField source="updatedAt" label="Updated At" />
       </SimpleShowLayout>
     </Show>

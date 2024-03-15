@@ -18,25 +18,37 @@ import { ApplicationService } from "../application.service";
 const nonExistingId = "nonExistingId";
 const existingId = "existingId";
 const CREATE_INPUT = {
+  ait: "exampleAit",
   createdAt: new Date(),
+  description: "exampleDescription",
   id: "exampleId",
+  name: "exampleName",
   updatedAt: new Date(),
 };
 const CREATE_RESULT = {
+  ait: "exampleAit",
   createdAt: new Date(),
+  description: "exampleDescription",
   id: "exampleId",
+  name: "exampleName",
   updatedAt: new Date(),
 };
 const FIND_MANY_RESULT = [
   {
+    ait: "exampleAit",
     createdAt: new Date(),
+    description: "exampleDescription",
     id: "exampleId",
+    name: "exampleName",
     updatedAt: new Date(),
   },
 ];
 const FIND_ONE_RESULT = {
+  ait: "exampleAit",
   createdAt: new Date(),
+  description: "exampleDescription",
   id: "exampleId",
+  name: "exampleName",
   updatedAt: new Date(),
 };
 
