@@ -14,6 +14,7 @@ import { PrismaService } from "../../prisma/prisma.service";
 import {
   Prisma,
   User, // @ts-ignore
+  Assessment, // @ts-ignore
   Question,
 } from "@prisma/client";
 
@@ -76,6 +77,14 @@ export class UserServiceBase {
     args: Prisma.SelectSubset<T, Prisma.UserDeleteArgs>
   ): Promise<User> {
     return this.prisma.user.delete(args);
+  }
+
+  async getAssessments(parentId: string): Promise<Assessment | null> {
+    return this.prisma.user
+      .findUnique({
+        where: { id: parentId },
+      })
+      .assessments();
   }
 
   async getQuestions(parentId: string): Promise<Question | null> {

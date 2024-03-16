@@ -14,7 +14,8 @@ import { PrismaService } from "../../prisma/prisma.service";
 import {
   Prisma,
   Risk, // @ts-ignore
-  QuestionsRIsk,
+  QuestionsRIsk, // @ts-ignore
+  Assessment,
 } from "@prisma/client";
 
 export class RiskServiceBase {
@@ -61,5 +62,13 @@ export class RiskServiceBase {
         where: { id: parentId },
       })
       .questions(args);
+  }
+
+  async getAssessment(parentId: string): Promise<Assessment | null> {
+    return this.prisma.risk
+      .findUnique({
+        where: { id: parentId },
+      })
+      .assessment();
   }
 }

@@ -1,6 +1,8 @@
+import { Assessment } from "../assessment/Assessment";
 import { QuestionsRIsk } from "../questionsRIsk/QuestionsRIsk";
 
 export type Risk = {
+  assessment?: Assessment | null;
   createdAt: Date;
   id: string;
   mitigationPlan: string | null;

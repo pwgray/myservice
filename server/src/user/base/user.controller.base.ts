@@ -50,6 +50,12 @@ export class UserControllerBase {
       data: {
         ...data,
 
+        assessments: data.assessments
+          ? {
+              connect: data.assessments,
+            }
+          : undefined,
+
         questions: data.questions
           ? {
               connect: data.questions,
@@ -57,6 +63,12 @@ export class UserControllerBase {
           : undefined,
       },
       select: {
+        assessments: {
+          select: {
+            id: true,
+          },
+        },
+
         createdAt: true,
         firstName: true,
         id: true,
@@ -92,6 +104,12 @@ export class UserControllerBase {
     return this.service.users({
       ...args,
       select: {
+        assessments: {
+          select: {
+            id: true,
+          },
+        },
+
         createdAt: true,
         firstName: true,
         id: true,
@@ -128,6 +146,12 @@ export class UserControllerBase {
     const result = await this.service.user({
       where: params,
       select: {
+        assessments: {
+          select: {
+            id: true,
+          },
+        },
+
         createdAt: true,
         firstName: true,
         id: true,
@@ -174,6 +198,12 @@ export class UserControllerBase {
         data: {
           ...data,
 
+          assessments: data.assessments
+            ? {
+                connect: data.assessments,
+              }
+            : undefined,
+
           questions: data.questions
             ? {
                 connect: data.questions,
@@ -181,6 +211,12 @@ export class UserControllerBase {
             : undefined,
         },
         select: {
+          assessments: {
+            select: {
+              id: true,
+            },
+          },
+
           createdAt: true,
           firstName: true,
           id: true,
@@ -225,6 +261,12 @@ export class UserControllerBase {
       return await this.service.deleteUser({
         where: params,
         select: {
+          assessments: {
+            select: {
+              id: true,
+            },
+          },
+
           createdAt: true,
           firstName: true,
           id: true,

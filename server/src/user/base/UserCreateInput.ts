@@ -11,15 +11,28 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, ValidateNested } from "class-validator";
-import { QuestionWhereUniqueInput } from "../../question/base/QuestionWhereUniqueInput";
+import { AssessmentWhereUniqueInput } from "../../assessment/base/AssessmentWhereUniqueInput";
+import { ValidateNested, IsOptional, IsString } from "class-validator";
 import { Type } from "class-transformer";
+import { QuestionWhereUniqueInput } from "../../question/base/QuestionWhereUniqueInput";
 import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
 
 @InputType()
 class UserCreateInput {
+  @ApiProperty({
+    required: false,
+    type: () => AssessmentWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => AssessmentWhereUniqueInput)
+  @IsOptional()
+  @Field(() => AssessmentWhereUniqueInput, {
+    nullable: true,
+  })
+  assessments?: AssessmentWhereUniqueInput | null;
+
   @ApiProperty({
     required: false,
     type: String,

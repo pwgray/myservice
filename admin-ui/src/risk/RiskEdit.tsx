@@ -4,17 +4,27 @@ import {
   Edit,
   SimpleForm,
   EditProps,
+  ReferenceInput,
+  SelectInput,
   TextInput,
   ReferenceArrayInput,
   SelectArrayInput,
 } from "react-admin";
 
+import { AssessmentTitle } from "../assessment/AssessmentTitle";
 import { QuestionsRIskTitle } from "../questionsRIsk/QuestionsRIskTitle";
 
 export const RiskEdit = (props: EditProps): React.ReactElement => {
   return (
     <Edit {...props}>
       <SimpleForm>
+        <ReferenceInput
+          source="assessment.id"
+          reference="Assessment"
+          label="Assessment"
+        >
+          <SelectInput optionText={AssessmentTitle} />
+        </ReferenceInput>
         <TextInput label="MitigationPlan" source="mitigationPlan" />
         <TextInput label="Owner" source="owner" />
         <ReferenceArrayInput

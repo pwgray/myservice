@@ -26,6 +26,9 @@ import { Application } from "./Application";
 import { ApplicationFindManyArgs } from "./ApplicationFindManyArgs";
 import { ApplicationWhereUniqueInput } from "./ApplicationWhereUniqueInput";
 import { ApplicationUpdateInput } from "./ApplicationUpdateInput";
+import { AssessmentFindManyArgs } from "../../assessment/base/AssessmentFindManyArgs";
+import { Assessment } from "../../assessment/base/Assessment";
+import { AssessmentWhereUniqueInput } from "../../assessment/base/AssessmentWhereUniqueInput";
 import { QuestionnaireFindManyArgs } from "../../questionnaire/base/QuestionnaireFindManyArgs";
 import { Questionnaire } from "../../questionnaire/base/Questionnaire";
 import { QuestionnaireWhereUniqueInput } from "../../questionnaire/base/QuestionnaireWhereUniqueInput";
@@ -198,6 +201,113 @@ export class ApplicationControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @common.Get("/:id/assessments")
+  @ApiNestedQuery(AssessmentFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "Assessment",
+    action: "read",
+    possession: "any",
+  })
+  async findAssessments(
+    @common.Req() request: Request,
+    @common.Param() params: ApplicationWhereUniqueInput
+  ): Promise<Assessment[]> {
+    const query = plainToClass(AssessmentFindManyArgs, request.query);
+    const results = await this.service.findAssessments(params.id, {
+      ...query,
+      select: {
+        application: {
+          select: {
+            id: true,
+          },
+        },
+
+        assessor: {
+          select: {
+            id: true,
+          },
+        },
+
+        createdAt: true,
+        id: true,
+        updatedAt: true,
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results;
+  }
+
+  @common.Post("/:id/assessments")
+  @nestAccessControl.UseRoles({
+    resource: "Application",
+    action: "update",
+    possession: "any",
+  })
+  async connectAssessments(
+    @common.Param() params: ApplicationWhereUniqueInput,
+    @common.Body() body: AssessmentWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      assessments: {
+        connect: body,
+      },
+    };
+    await this.service.updateApplication({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Patch("/:id/assessments")
+  @nestAccessControl.UseRoles({
+    resource: "Application",
+    action: "update",
+    possession: "any",
+  })
+  async updateAssessments(
+    @common.Param() params: ApplicationWhereUniqueInput,
+    @common.Body() body: AssessmentWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      assessments: {
+        set: body,
+      },
+    };
+    await this.service.updateApplication({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Delete("/:id/assessments")
+  @nestAccessControl.UseRoles({
+    resource: "Application",
+    action: "update",
+    possession: "any",
+  })
+  async disconnectAssessments(
+    @common.Param() params: ApplicationWhereUniqueInput,
+    @common.Body() body: AssessmentWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      assessments: {
+        disconnect: body,
+      },
+    };
+    await this.service.updateApplication({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)

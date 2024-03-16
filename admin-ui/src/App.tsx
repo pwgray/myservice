@@ -33,6 +33,10 @@ import { QuestionsRIskList } from "./questionsRIsk/QuestionsRIskList";
 import { QuestionsRIskCreate } from "./questionsRIsk/QuestionsRIskCreate";
 import { QuestionsRIskEdit } from "./questionsRIsk/QuestionsRIskEdit";
 import { QuestionsRIskShow } from "./questionsRIsk/QuestionsRIskShow";
+import { AssessmentList } from "./assessment/AssessmentList";
+import { AssessmentCreate } from "./assessment/AssessmentCreate";
+import { AssessmentEdit } from "./assessment/AssessmentEdit";
+import { AssessmentShow } from "./assessment/AssessmentShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -107,6 +111,13 @@ const App = (): React.ReactElement => {
           edit={QuestionsRIskEdit}
           create={QuestionsRIskCreate}
           show={QuestionsRIskShow}
+        />
+        <Resource
+          name="Assessment"
+          list={AssessmentList}
+          edit={AssessmentEdit}
+          create={AssessmentCreate}
+          show={AssessmentShow}
         />
       </Admin>
     </div>

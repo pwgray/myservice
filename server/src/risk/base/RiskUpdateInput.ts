@@ -11,12 +11,25 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, ValidateNested } from "class-validator";
-import { QuestionsRIskUpdateManyWithoutRisksInput } from "./QuestionsRIskUpdateManyWithoutRisksInput";
+import { AssessmentWhereUniqueInput } from "../../assessment/base/AssessmentWhereUniqueInput";
+import { ValidateNested, IsOptional, IsString } from "class-validator";
 import { Type } from "class-transformer";
+import { QuestionsRIskUpdateManyWithoutRisksInput } from "./QuestionsRIskUpdateManyWithoutRisksInput";
 
 @InputType()
 class RiskUpdateInput {
+  @ApiProperty({
+    required: false,
+    type: () => AssessmentWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => AssessmentWhereUniqueInput)
+  @IsOptional()
+  @Field(() => AssessmentWhereUniqueInput, {
+    nullable: true,
+  })
+  assessment?: AssessmentWhereUniqueInput | null;
+
   @ApiProperty({
     required: false,
     type: String,

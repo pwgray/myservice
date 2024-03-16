@@ -50,8 +50,22 @@ export class RiskControllerBase {
   })
   async createRisk(@common.Body() data: RiskCreateInput): Promise<Risk> {
     return await this.service.createRisk({
-      data: data,
+      data: {
+        ...data,
+
+        assessment: data.assessment
+          ? {
+              connect: data.assessment,
+            }
+          : undefined,
+      },
       select: {
+        assessment: {
+          select: {
+            id: true,
+          },
+        },
+
         createdAt: true,
         id: true,
         mitigationPlan: true,
@@ -79,6 +93,12 @@ export class RiskControllerBase {
     return this.service.risks({
       ...args,
       select: {
+        assessment: {
+          select: {
+            id: true,
+          },
+        },
+
         createdAt: true,
         id: true,
         mitigationPlan: true,
@@ -107,6 +127,12 @@ export class RiskControllerBase {
     const result = await this.service.risk({
       where: params,
       select: {
+        assessment: {
+          select: {
+            id: true,
+          },
+        },
+
         createdAt: true,
         id: true,
         mitigationPlan: true,
@@ -142,8 +168,22 @@ export class RiskControllerBase {
     try {
       return await this.service.updateRisk({
         where: params,
-        data: data,
+        data: {
+          ...data,
+
+          assessment: data.assessment
+            ? {
+                connect: data.assessment,
+              }
+            : undefined,
+        },
         select: {
+          assessment: {
+            select: {
+              id: true,
+            },
+          },
+
           createdAt: true,
           id: true,
           mitigationPlan: true,
@@ -180,6 +220,12 @@ export class RiskControllerBase {
       return await this.service.deleteRisk({
         where: params,
         select: {
+          assessment: {
+            select: {
+              id: true,
+            },
+          },
+
           createdAt: true,
           id: true,
           mitigationPlan: true,

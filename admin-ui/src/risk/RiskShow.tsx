@@ -4,20 +4,28 @@ import {
   Show,
   SimpleShowLayout,
   ShowProps,
-  DateField,
+  ReferenceField,
   TextField,
+  DateField,
   ReferenceManyField,
   Datagrid,
-  ReferenceField,
 } from "react-admin";
 
 import { QUESTION_TITLE_FIELD } from "../question/QuestionTitle";
 import { RISK_TITLE_FIELD } from "./RiskTitle";
+import { ASSESSMENT_TITLE_FIELD } from "../assessment/AssessmentTitle";
 
 export const RiskShow = (props: ShowProps): React.ReactElement => {
   return (
     <Show {...props}>
       <SimpleShowLayout>
+        <ReferenceField
+          label="Assessment"
+          source="assessment.id"
+          reference="Assessment"
+        >
+          <TextField source={ASSESSMENT_TITLE_FIELD} />
+        </ReferenceField>
         <DateField source="createdAt" label="Created At" />
         <TextField label="ID" source="id" />
         <TextField label="MitigationPlan" source="mitigationPlan" />

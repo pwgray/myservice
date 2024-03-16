@@ -14,6 +14,7 @@ import { PrismaService } from "../../prisma/prisma.service";
 import {
   Prisma,
   Application, // @ts-ignore
+  Assessment, // @ts-ignore
   Questionnaire,
 } from "@prisma/client";
 
@@ -50,6 +51,17 @@ export class ApplicationServiceBase {
     args: Prisma.SelectSubset<T, Prisma.ApplicationDeleteArgs>
   ): Promise<Application> {
     return this.prisma.application.delete(args);
+  }
+
+  async findAssessments(
+    parentId: string,
+    args: Prisma.AssessmentFindManyArgs
+  ): Promise<Assessment[]> {
+    return this.prisma.application
+      .findUniqueOrThrow({
+        where: { id: parentId },
+      })
+      .assessments(args);
   }
 
   async findQuestionnaires(

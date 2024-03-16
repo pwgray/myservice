@@ -26,6 +26,8 @@ import { ApplicationFindUniqueArgs } from "./ApplicationFindUniqueArgs";
 import { CreateApplicationArgs } from "./CreateApplicationArgs";
 import { UpdateApplicationArgs } from "./UpdateApplicationArgs";
 import { DeleteApplicationArgs } from "./DeleteApplicationArgs";
+import { AssessmentFindManyArgs } from "../../assessment/base/AssessmentFindManyArgs";
+import { Assessment } from "../../assessment/base/Assessment";
 import { QuestionnaireFindManyArgs } from "../../questionnaire/base/QuestionnaireFindManyArgs";
 import { Questionnaire } from "../../questionnaire/base/Questionnaire";
 import { ApplicationService } from "../application.service";
@@ -142,6 +144,26 @@ export class ApplicationResolverBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => [Assessment], { name: "assessments" })
+  @nestAccessControl.UseRoles({
+    resource: "Assessment",
+    action: "read",
+    possession: "any",
+  })
+  async findAssessments(
+    @graphql.Parent() parent: Application,
+    @graphql.Args() args: AssessmentFindManyArgs
+  ): Promise<Assessment[]> {
+    const results = await this.service.findAssessments(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
