@@ -88,7 +88,7 @@ class QuestionUpdateInput {
   @Field(() => QuestionsRIskUpdateManyWithoutQuestionsInput, {
     nullable: true,
   })
-  RIsks?: QuestionsRIskUpdateManyWithoutQuestionsInput;
+  Risks?: QuestionsRIskUpdateManyWithoutQuestionsInput;
 
   @ApiProperty({
     required: false,

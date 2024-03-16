@@ -92,7 +92,7 @@ class Question {
   @ValidateNested()
   @Type(() => QuestionsRIsk)
   @IsOptional()
-  RIsks?: Array<QuestionsRIsk>;
+  Risks?: Array<QuestionsRIsk>;
 
   @ApiProperty({
     required: false,

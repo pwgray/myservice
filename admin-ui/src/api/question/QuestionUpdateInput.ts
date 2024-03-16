@@ -9,6 +9,6 @@ export type QuestionUpdateInput = {
   name?: string | null;
   owner?: UserWhereUniqueInput | null;
   questionnaire?: QuestionnaireWhereUniqueInput | null;
-  RIsks?: QuestionsRIskUpdateManyWithoutQuestionsInput;
+  Risks?: QuestionsRIskUpdateManyWithoutQuestionsInput;
   text?: string | null;
 };

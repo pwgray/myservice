@@ -101,7 +101,7 @@ class QuestionWhereInput {
   @Field(() => QuestionsRIskListRelationFilter, {
     nullable: true,
   })
-  RIsks?: QuestionsRIskListRelationFilter;
+  Risks?: QuestionsRIskListRelationFilter;
 
   @ApiProperty({
     required: false,
