@@ -1,0 +1,388 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Answer {
+  createdAt: DateTime!
+  id: String!
+  question: Question
+  updatedAt: DateTime!
+}
+
+input AnswerCreateInput {
+  question: QuestionWhereUniqueInput
+}
+
+input AnswerCreateNestedManyWithoutQuestionsInput {
+  connect: [AnswerWhereUniqueInput!]
+}
+
+input AnswerListRelationFilter {
+  every: AnswerWhereInput
+  none: AnswerWhereInput
+  some: AnswerWhereInput
+}
+
+input AnswerOrderByInput {
+  QuestionId: SortOrder
+  createdAt: SortOrder
+  id: SortOrder
+  updatedAt: SortOrder
+}
+
+input AnswerUpdateInput {
+  question: QuestionWhereUniqueInput
+}
+
+input AnswerUpdateManyWithoutQuestionsInput {
+  connect: [AnswerWhereUniqueInput!]
+  disconnect: [AnswerWhereUniqueInput!]
+  set: [AnswerWhereUniqueInput!]
+}
+
+input AnswerWhereInput {
+  id: StringFilter
+  question: QuestionWhereUniqueInput
+}
+
+input AnswerWhereUniqueInput {
+  id: String!
+}
+
+type Application {
+  createdAt: DateTime!
+  id: String!
+  questionnaires(orderBy: [QuestionnaireOrderByInput!], skip: Float, take: Float, where: QuestionnaireWhereInput): [Questionnaire!]!
+  updatedAt: DateTime!
+}
+
+input ApplicationCreateInput {
+  questionnaires: QuestionnaireCreateNestedManyWithoutApplicationsInput
+}
+
+input ApplicationOrderByInput {
+  createdAt: SortOrder
+  id: SortOrder
+  updatedAt: SortOrder
+}
+
+input ApplicationUpdateInput {
+  questionnaires: QuestionnaireUpdateManyWithoutApplicationsInput
+}
+
+input ApplicationWhereInput {
+  id: StringFilter
+  questionnaires: QuestionnaireListRelationFilter
+}
+
+input ApplicationWhereUniqueInput {
+  id: String!
+}
+
+input Credentials {
+  password: String!
+  username: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type MetaQueryPayload {
+  count: Float!
+}
+
+type Mutation {
+  createAnswer(data: AnswerCreateInput!): Answer!
+  createApplication(data: ApplicationCreateInput!): Application!
+  createQuestion(data: QuestionCreateInput!): Question!
+  createQuestionnaire(data: QuestionnaireCreateInput!): Questionnaire!
+  createUser(data: UserCreateInput!): User!
+  deleteAnswer(where: AnswerWhereUniqueInput!): Answer!
+  deleteApplication(where: ApplicationWhereUniqueInput!): Application!
+  deleteQuestion(where: QuestionWhereUniqueInput!): Question!
+  deleteQuestionnaire(where: QuestionnaireWhereUniqueInput!): Questionnaire!
+  deleteRisk(where: RiskWhereUniqueInput!): Risk!
+  deleteUser(where: UserWhereUniqueInput!): User!
+  login(credentials: Credentials!): UserInfo!
+  updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer!
+  updateApplication(data: ApplicationUpdateInput!, where: ApplicationWhereUniqueInput!): Application!
+  updateQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question!
+  updateQuestionnaire(data: QuestionnaireUpdateInput!, where: QuestionnaireWhereUniqueInput!): Questionnaire!
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User!
+}
+
+type Query {
+  _answersMeta(where: AnswerWhereInput): MetaQueryPayload!
+  _applicationsMeta(where: ApplicationWhereInput): MetaQueryPayload!
+  _questionnairesMeta(where: QuestionnaireWhereInput): MetaQueryPayload!
+  _questionsMeta(where: QuestionWhereInput): MetaQueryPayload!
+  _risksMeta(where: RiskWhereInput): MetaQueryPayload!
+  _usersMeta(where: UserWhereInput): MetaQueryPayload!
+  answer(where: AnswerWhereUniqueInput!): Answer
+  answers(orderBy: [AnswerOrderByInput!], skip: Float, take: Float, where: AnswerWhereInput): [Answer!]!
+  application(where: ApplicationWhereUniqueInput!): Application
+  applications(orderBy: [ApplicationOrderByInput!], skip: Float, take: Float, where: ApplicationWhereInput): [Application!]!
+  question(where: QuestionWhereUniqueInput!): Question
+  questionnaire(where: QuestionnaireWhereUniqueInput!): Questionnaire
+  questionnaires(orderBy: [QuestionnaireOrderByInput!], skip: Float, take: Float, where: QuestionnaireWhereInput): [Questionnaire!]!
+  questions(orderBy: [QuestionOrderByInput!], skip: Float, take: Float, where: QuestionWhereInput): [Question!]!
+  risk(where: RiskWhereUniqueInput!): Risk
+  risks(orderBy: [RiskOrderByInput!], skip: Float, take: Float, where: RiskWhereInput): [Risk!]!
+  user(where: UserWhereUniqueInput!): User
+  userInfo: UserInfo!
+  users(orderBy: [UserOrderByInput!], skip: Float, take: Float, where: UserWhereInput): [User!]!
+}
+
+enum QueryMode {
+  Default
+  Insensitive
+}
+
+type Question {
+  answers(orderBy: [AnswerOrderByInput!], skip: Float, take: Float, where: AnswerWhereInput): [Answer!]!
+  createdAt: DateTime!
+  description: String
+  id: String!
+  name: String
+  owner: User
+  questionnaire: Questionnaire
+  text: String
+  updatedAt: DateTime!
+}
+
+input QuestionCreateInput {
+  answers: AnswerCreateNestedManyWithoutQuestionsInput
+  description: String
+  name: String
+  owner: UserWhereUniqueInput
+  questionnaire: QuestionnaireWhereUniqueInput
+  text: String
+}
+
+input QuestionCreateNestedManyWithoutQuestionnairesInput {
+  connect: [QuestionWhereUniqueInput!]
+}
+
+input QuestionListRelationFilter {
+  every: QuestionWhereInput
+  none: QuestionWhereInput
+  some: QuestionWhereInput
+}
+
+input QuestionOrderByInput {
+  OwnerId: SortOrder
+  QuestionnaireId: SortOrder
+  createdAt: SortOrder
+  description: SortOrder
+  id: SortOrder
+  name: SortOrder
+  text: SortOrder
+  updatedAt: SortOrder
+}
+
+input QuestionUpdateInput {
+  answers: AnswerUpdateManyWithoutQuestionsInput
+  description: String
+  name: String
+  owner: UserWhereUniqueInput
+  questionnaire: QuestionnaireWhereUniqueInput
+  text: String
+}
+
+input QuestionUpdateManyWithoutQuestionnairesInput {
+  connect: [QuestionWhereUniqueInput!]
+  disconnect: [QuestionWhereUniqueInput!]
+  set: [QuestionWhereUniqueInput!]
+}
+
+input QuestionWhereInput {
+  answers: AnswerListRelationFilter
+  description: StringNullableFilter
+  id: StringFilter
+  name: StringNullableFilter
+  owner: UserWhereUniqueInput
+  questionnaire: QuestionnaireWhereUniqueInput
+  text: StringNullableFilter
+}
+
+input QuestionWhereUniqueInput {
+  id: String!
+}
+
+type Questionnaire {
+  application: Application
+  createdAt: DateTime!
+  id: String!
+  name: String
+  questions(orderBy: [QuestionOrderByInput!], skip: Float, take: Float, where: QuestionWhereInput): [Question!]!
+  updatedAt: DateTime!
+}
+
+input QuestionnaireCreateInput {
+  application: ApplicationWhereUniqueInput
+  name: String
+  questions: QuestionCreateNestedManyWithoutQuestionnairesInput
+}
+
+input QuestionnaireCreateNestedManyWithoutApplicationsInput {
+  connect: [QuestionnaireWhereUniqueInput!]
+}
+
+input QuestionnaireListRelationFilter {
+  every: QuestionnaireWhereInput
+  none: QuestionnaireWhereInput
+  some: QuestionnaireWhereInput
+}
+
+input QuestionnaireOrderByInput {
+  ApplicationId: SortOrder
+  createdAt: SortOrder
+  id: SortOrder
+  name: SortOrder
+  updatedAt: SortOrder
+}
+
+input QuestionnaireUpdateInput {
+  application: ApplicationWhereUniqueInput
+  name: String
+  questions: QuestionUpdateManyWithoutQuestionnairesInput
+}
+
+input QuestionnaireUpdateManyWithoutApplicationsInput {
+  connect: [QuestionnaireWhereUniqueInput!]
+  disconnect: [QuestionnaireWhereUniqueInput!]
+  set: [QuestionnaireWhereUniqueInput!]
+}
+
+input QuestionnaireWhereInput {
+  application: ApplicationWhereUniqueInput
+  id: StringFilter
+  name: StringNullableFilter
+  questions: QuestionListRelationFilter
+}
+
+input QuestionnaireWhereUniqueInput {
+  id: String!
+}
+
+type Risk {
+  createdAt: DateTime!
+  id: String!
+  updatedAt: DateTime!
+}
+
+input RiskOrderByInput {
+  createdAt: SortOrder
+  id: SortOrder
+  updatedAt: SortOrder
+}
+
+input RiskWhereInput {
+  id: StringFilter
+}
+
+input RiskWhereUniqueInput {
+  id: String!
+}
+
+enum SortOrder {
+  Asc
+  Desc
+}
+
+input StringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: String
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: String
+  notIn: [String!]
+  startsWith: String
+}
+
+type User {
+  createdAt: DateTime!
+  firstName: String
+  id: String!
+  lastName: String
+  questions: Question
+  roles: JSON!
+  updatedAt: DateTime!
+  username: String!
+}
+
+input UserCreateInput {
+  firstName: String
+  lastName: String
+  password: String!
+  questions: QuestionWhereUniqueInput
+  roles: JSON!
+  username: String!
+}
+
+type UserInfo {
+  accessToken: String
+  id: String!
+  roles: [String!]!
+  username: String!
+}
+
+input UserOrderByInput {
+  createdAt: SortOrder
+  firstName: SortOrder
+  id: SortOrder
+  lastName: SortOrder
+  password: SortOrder
+  questionsId: SortOrder
+  roles: SortOrder
+  updatedAt: SortOrder
+  username: SortOrder
+}
+
+input UserUpdateInput {
+  firstName: String
+  lastName: String
+  password: String
+  questions: QuestionWhereUniqueInput
+  roles: JSON
+  username: String
+}
+
+input UserWhereInput {
+  firstName: StringNullableFilter
+  id: StringFilter
+  lastName: StringNullableFilter
+  questions: QuestionWhereUniqueInput
+  username: StringFilter
+}
+
+input UserWhereUniqueInput {
+  id: String!
+}
