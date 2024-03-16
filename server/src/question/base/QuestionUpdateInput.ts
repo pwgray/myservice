@@ -16,6 +16,7 @@ import { ValidateNested, IsOptional, IsString } from "class-validator";
 import { Type } from "class-transformer";
 import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 import { QuestionnaireWhereUniqueInput } from "../../questionnaire/base/QuestionnaireWhereUniqueInput";
+import { QuestionsRIskUpdateManyWithoutQuestionsInput } from "./QuestionsRIskUpdateManyWithoutQuestionsInput";
 
 @InputType()
 class QuestionUpdateInput {
@@ -76,6 +77,18 @@ class QuestionUpdateInput {
     nullable: true,
   })
   questionnaire?: QuestionnaireWhereUniqueInput | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => QuestionsRIskUpdateManyWithoutQuestionsInput,
+  })
+  @ValidateNested()
+  @Type(() => QuestionsRIskUpdateManyWithoutQuestionsInput)
+  @IsOptional()
+  @Field(() => QuestionsRIskUpdateManyWithoutQuestionsInput, {
+    nullable: true,
+  })
+  RIsks?: QuestionsRIskUpdateManyWithoutQuestionsInput;
 
   @ApiProperty({
     required: false,

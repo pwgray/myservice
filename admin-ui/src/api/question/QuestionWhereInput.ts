@@ -3,6 +3,7 @@ import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { StringFilter } from "../../util/StringFilter";
 import { UserWhereUniqueInput } from "../user/UserWhereUniqueInput";
 import { QuestionnaireWhereUniqueInput } from "../questionnaire/QuestionnaireWhereUniqueInput";
+import { QuestionsRIskListRelationFilter } from "../questionsRIsk/QuestionsRIskListRelationFilter";
 
 export type QuestionWhereInput = {
   answers?: AnswerListRelationFilter;
@@ -11,5 +12,6 @@ export type QuestionWhereInput = {
   name?: StringNullableFilter;
   owner?: UserWhereUniqueInput;
   questionnaire?: QuestionnaireWhereUniqueInput;
+  RIsks?: QuestionsRIskListRelationFilter;
   text?: StringNullableFilter;
 };

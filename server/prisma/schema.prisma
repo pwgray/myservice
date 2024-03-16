@@ -21,25 +21,27 @@ model User {
 
 model Question {
   answers         Answer[]
-  createdAt       DateTime       @default(now())
+  createdAt       DateTime        @default(now())
   description     String?
-  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
   name            String?
-  owner           User?          @relation(fields: [OwnerId], references: [id])
-  OwnerId         String?        @unique @db.ObjectId
-  questionnaire   Questionnaire? @relation(fields: [QuestionnaireId], references: [id])
-  QuestionnaireId String?        @db.ObjectId
+  owner           User?           @relation(fields: [OwnerId], references: [id])
+  OwnerId         String?         @unique @db.ObjectId
+  questionnaire   Questionnaire?  @relation(fields: [QuestionnaireId], references: [id])
+  QuestionnaireId String?         @db.ObjectId
+  RIsks           QuestionsRIsk[]
   text            String?
-  updatedAt       DateTime       @updatedAt
+  updatedAt       DateTime        @updatedAt
 }
 
 model Risk {
-  createdAt      DateTime @default(now())
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime        @default(now())
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
   mitigationPlan String?
   owner          String?
+  questions      QuestionsRIsk[]
   summary        String?
-  updatedAt      DateTime @updatedAt
+  updatedAt      DateTime        @updatedAt
 }
 
 model Answer {
@@ -70,4 +72,14 @@ model Application {
   name           String?
   questionnaires Questionnaire[]
   updatedAt      DateTime        @updatedAt
+}
+
+model QuestionsRIsk {
+  createdAt  DateTime  @default(now())
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  question   Question? @relation(fields: [QuestionId], references: [id])
+  QuestionId String?   @db.ObjectId
+  risk       Risk?     @relation(fields: [RiskId], references: [id])
+  RiskId     String?   @db.ObjectId
+  updatedAt  DateTime  @updatedAt
 }

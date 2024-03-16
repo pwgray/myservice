@@ -26,6 +26,9 @@ import { Risk } from "./Risk";
 import { RiskFindManyArgs } from "./RiskFindManyArgs";
 import { RiskWhereUniqueInput } from "./RiskWhereUniqueInput";
 import { RiskUpdateInput } from "./RiskUpdateInput";
+import { QuestionsRIskFindManyArgs } from "../../questionsRIsk/base/QuestionsRIskFindManyArgs";
+import { QuestionsRIsk } from "../../questionsRIsk/base/QuestionsRIsk";
+import { QuestionsRIskWhereUniqueInput } from "../../questionsRIsk/base/QuestionsRIskWhereUniqueInput";
 
 @swagger.ApiBearerAuth()
 @common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
@@ -193,5 +196,113 @@ export class RiskControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @common.Get("/:id/questions")
+  @ApiNestedQuery(QuestionsRIskFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "QuestionsRIsk",
+    action: "read",
+    possession: "any",
+  })
+  async findQuestions(
+    @common.Req() request: Request,
+    @common.Param() params: RiskWhereUniqueInput
+  ): Promise<QuestionsRIsk[]> {
+    const query = plainToClass(QuestionsRIskFindManyArgs, request.query);
+    const results = await this.service.findQuestions(params.id, {
+      ...query,
+      select: {
+        createdAt: true,
+        id: true,
+
+        question: {
+          select: {
+            id: true,
+          },
+        },
+
+        risk: {
+          select: {
+            id: true,
+          },
+        },
+
+        updatedAt: true,
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results;
+  }
+
+  @common.Post("/:id/questions")
+  @nestAccessControl.UseRoles({
+    resource: "Risk",
+    action: "update",
+    possession: "any",
+  })
+  async connectQuestions(
+    @common.Param() params: RiskWhereUniqueInput,
+    @common.Body() body: QuestionsRIskWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      questions: {
+        connect: body,
+      },
+    };
+    await this.service.updateRisk({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Patch("/:id/questions")
+  @nestAccessControl.UseRoles({
+    resource: "Risk",
+    action: "update",
+    possession: "any",
+  })
+  async updateQuestions(
+    @common.Param() params: RiskWhereUniqueInput,
+    @common.Body() body: QuestionsRIskWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      questions: {
+        set: body,
+      },
+    };
+    await this.service.updateRisk({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Delete("/:id/questions")
+  @nestAccessControl.UseRoles({
+    resource: "Risk",
+    action: "update",
+    possession: "any",
+  })
+  async disconnectQuestions(
+    @common.Param() params: RiskWhereUniqueInput,
+    @common.Body() body: QuestionsRIskWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      questions: {
+        disconnect: body,
+      },
+    };
+    await this.service.updateRisk({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 }

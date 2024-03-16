@@ -14,6 +14,7 @@ import {
 import { AnswerTitle } from "../answer/AnswerTitle";
 import { UserTitle } from "../user/UserTitle";
 import { QuestionnaireTitle } from "../questionnaire/QuestionnaireTitle";
+import { QuestionsRIskTitle } from "../questionsRIsk/QuestionsRIskTitle";
 
 export const QuestionEdit = (props: EditProps): React.ReactElement => {
   return (
@@ -39,6 +40,14 @@ export const QuestionEdit = (props: EditProps): React.ReactElement => {
         >
           <SelectInput optionText={QuestionnaireTitle} />
         </ReferenceInput>
+        <ReferenceArrayInput
+          source="RIsks"
+          reference="QuestionsRIsk"
+          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+          format={(value: any) => value && value.map((v: any) => v.id)}
+        >
+          <SelectArrayInput optionText={QuestionsRIskTitle} />
+        </ReferenceArrayInput>
         <TextInput label="Text" source="text" />
       </SimpleForm>
     </Edit>

@@ -29,6 +29,10 @@ import { ApplicationList } from "./application/ApplicationList";
 import { ApplicationCreate } from "./application/ApplicationCreate";
 import { ApplicationEdit } from "./application/ApplicationEdit";
 import { ApplicationShow } from "./application/ApplicationShow";
+import { QuestionsRIskList } from "./questionsRIsk/QuestionsRIskList";
+import { QuestionsRIskCreate } from "./questionsRIsk/QuestionsRIskCreate";
+import { QuestionsRIskEdit } from "./questionsRIsk/QuestionsRIskEdit";
+import { QuestionsRIskShow } from "./questionsRIsk/QuestionsRIskShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -96,6 +100,13 @@ const App = (): React.ReactElement => {
           edit={ApplicationEdit}
           create={ApplicationCreate}
           show={ApplicationShow}
+        />
+        <Resource
+          name="QuestionsRIsk"
+          list={QuestionsRIskList}
+          edit={QuestionsRIskEdit}
+          create={QuestionsRIskCreate}
+          show={QuestionsRIskShow}
         />
       </Admin>
     </div>
