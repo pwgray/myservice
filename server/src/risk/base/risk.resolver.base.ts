@@ -26,6 +26,8 @@ import { RiskFindUniqueArgs } from "./RiskFindUniqueArgs";
 import { CreateRiskArgs } from "./CreateRiskArgs";
 import { UpdateRiskArgs } from "./UpdateRiskArgs";
 import { DeleteRiskArgs } from "./DeleteRiskArgs";
+import { QuestionsRIskFindManyArgs } from "../../questionsRIsk/base/QuestionsRIskFindManyArgs";
+import { QuestionsRIsk } from "../../questionsRIsk/base/QuestionsRIsk";
 import { RiskService } from "../risk.service";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Risk)
@@ -130,5 +132,25 @@ export class RiskResolverBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => [QuestionsRIsk], { name: "questions" })
+  @nestAccessControl.UseRoles({
+    resource: "QuestionsRIsk",
+    action: "read",
+    possession: "any",
+  })
+  async findQuestions(
+    @graphql.Parent() parent: Risk,
+    @graphql.Args() args: QuestionsRIskFindManyArgs
+  ): Promise<QuestionsRIsk[]> {
+    const results = await this.service.findQuestions(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
   }
 }

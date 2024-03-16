@@ -13,8 +13,9 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
-import { IsOptional } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
+import { QuestionsRIskListRelationFilter } from "../../questionsRIsk/base/QuestionsRIskListRelationFilter";
 
 @InputType()
 class RiskWhereInput {
@@ -50,6 +51,18 @@ class RiskWhereInput {
     nullable: true,
   })
   owner?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => QuestionsRIskListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => QuestionsRIskListRelationFilter)
+  @IsOptional()
+  @Field(() => QuestionsRIskListRelationFilter, {
+    nullable: true,
+  })
+  questions?: QuestionsRIskListRelationFilter;
 
   @ApiProperty({
     required: false,

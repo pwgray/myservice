@@ -16,6 +16,7 @@ import { ValidateNested, IsOptional, IsDate, IsString } from "class-validator";
 import { Type } from "class-transformer";
 import { User } from "../../user/base/User";
 import { Questionnaire } from "../../questionnaire/base/Questionnaire";
+import { QuestionsRIsk } from "../../questionsRIsk/base/QuestionsRIsk";
 
 @ObjectType()
 class Question {
@@ -83,6 +84,15 @@ class Question {
   @Type(() => Questionnaire)
   @IsOptional()
   questionnaire?: Questionnaire | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => [QuestionsRIsk],
+  })
+  @ValidateNested()
+  @Type(() => QuestionsRIsk)
+  @IsOptional()
+  RIsks?: Array<QuestionsRIsk>;
 
   @ApiProperty({
     required: false,

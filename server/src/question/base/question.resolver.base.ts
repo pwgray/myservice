@@ -28,6 +28,8 @@ import { UpdateQuestionArgs } from "./UpdateQuestionArgs";
 import { DeleteQuestionArgs } from "./DeleteQuestionArgs";
 import { AnswerFindManyArgs } from "../../answer/base/AnswerFindManyArgs";
 import { Answer } from "../../answer/base/Answer";
+import { QuestionsRIskFindManyArgs } from "../../questionsRIsk/base/QuestionsRIskFindManyArgs";
+import { QuestionsRIsk } from "../../questionsRIsk/base/QuestionsRIsk";
 import { User } from "../../user/base/User";
 import { Questionnaire } from "../../questionnaire/base/Questionnaire";
 import { QuestionService } from "../question.service";
@@ -186,6 +188,26 @@ export class QuestionResolverBase {
     @graphql.Args() args: AnswerFindManyArgs
   ): Promise<Answer[]> {
     const results = await this.service.findAnswers(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => [QuestionsRIsk], { name: "rIsks" })
+  @nestAccessControl.UseRoles({
+    resource: "QuestionsRIsk",
+    action: "read",
+    possession: "any",
+  })
+  async findRIsks(
+    @graphql.Parent() parent: Question,
+    @graphql.Args() args: QuestionsRIskFindManyArgs
+  ): Promise<QuestionsRIsk[]> {
+    const results = await this.service.findRIsks(parent.id, args);
 
     if (!results) {
       return [];

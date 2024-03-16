@@ -15,6 +15,7 @@ import {
   Prisma,
   Question, // @ts-ignore
   Answer, // @ts-ignore
+  QuestionsRIsk, // @ts-ignore
   User, // @ts-ignore
   Questionnaire,
 } from "@prisma/client";
@@ -63,6 +64,17 @@ export class QuestionServiceBase {
         where: { id: parentId },
       })
       .answers(args);
+  }
+
+  async findRIsks(
+    parentId: string,
+    args: Prisma.QuestionsRIskFindManyArgs
+  ): Promise<QuestionsRIsk[]> {
+    return this.prisma.question
+      .findUniqueOrThrow({
+        where: { id: parentId },
+      })
+      .RIsks(args);
   }
 
   async getOwner(parentId: string): Promise<User | null> {

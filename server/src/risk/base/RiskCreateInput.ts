@@ -11,7 +11,9 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional } from "class-validator";
+import { IsString, IsOptional, ValidateNested } from "class-validator";
+import { QuestionsRIskCreateNestedManyWithoutRisksInput } from "./QuestionsRIskCreateNestedManyWithoutRisksInput";
+import { Type } from "class-transformer";
 
 @InputType()
 class RiskCreateInput {
@@ -36,6 +38,18 @@ class RiskCreateInput {
     nullable: true,
   })
   owner?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => QuestionsRIskCreateNestedManyWithoutRisksInput,
+  })
+  @ValidateNested()
+  @Type(() => QuestionsRIskCreateNestedManyWithoutRisksInput)
+  @IsOptional()
+  @Field(() => QuestionsRIskCreateNestedManyWithoutRisksInput, {
+    nullable: true,
+  })
+  questions?: QuestionsRIskCreateNestedManyWithoutRisksInput;
 
   @ApiProperty({
     required: false,

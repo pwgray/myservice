@@ -1,6 +1,7 @@
 import { Answer } from "../answer/Answer";
 import { User } from "../user/User";
 import { Questionnaire } from "../questionnaire/Questionnaire";
+import { QuestionsRIsk } from "../questionsRIsk/QuestionsRIsk";
 
 export type Question = {
   answers?: Array<Answer>;
@@ -10,6 +11,7 @@ export type Question = {
   name: string | null;
   owner?: User | null;
   questionnaire?: Questionnaire | null;
+  RIsks?: Array<QuestionsRIsk>;
   text: string | null;
   updatedAt: Date;
 };

@@ -18,6 +18,7 @@ import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { StringFilter } from "../../util/StringFilter";
 import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 import { QuestionnaireWhereUniqueInput } from "../../questionnaire/base/QuestionnaireWhereUniqueInput";
+import { QuestionsRIskListRelationFilter } from "../../questionsRIsk/base/QuestionsRIskListRelationFilter";
 
 @InputType()
 class QuestionWhereInput {
@@ -89,6 +90,18 @@ class QuestionWhereInput {
     nullable: true,
   })
   questionnaire?: QuestionnaireWhereUniqueInput;
+
+  @ApiProperty({
+    required: false,
+    type: () => QuestionsRIskListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => QuestionsRIskListRelationFilter)
+  @IsOptional()
+  @Field(() => QuestionsRIskListRelationFilter, {
+    nullable: true,
+  })
+  RIsks?: QuestionsRIskListRelationFilter;
 
   @ApiProperty({
     required: false,
