@@ -1,7 +1,9 @@
+import { AssessmentWhereUniqueInput } from "../assessment/AssessmentWhereUniqueInput";
 import { QuestionWhereUniqueInput } from "../question/QuestionWhereUniqueInput";
 import { InputJsonValue } from "../../types";
 
 export type UserCreateInput = {
+  assessments?: AssessmentWhereUniqueInput | null;
   firstName?: string | null;
   lastName?: string | null;
   password: string;

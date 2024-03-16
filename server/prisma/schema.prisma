@@ -8,15 +8,16 @@ generator client {
 }
 
 model User {
-  createdAt DateTime  @default(now())
-  firstName String?
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  lastName  String?
-  password  String
-  questions Question?
-  roles     Json
-  updatedAt DateTime  @updatedAt
-  username  String    @unique
+  assessments Assessment?
+  createdAt   DateTime    @default(now())
+  firstName   String?
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  lastName    String?
+  password    String
+  questions   Question?
+  roles       Json
+  updatedAt   DateTime    @updatedAt
+  username    String      @unique
 }
 
 model Question {
@@ -35,6 +36,8 @@ model Question {
 }
 
 model Risk {
+  assessment     Assessment?     @relation(fields: [assessmentId], references: [id])
+  assessmentId   String?         @db.ObjectId
   createdAt      DateTime        @default(now())
   id             String          @id @default(auto()) @map("_id") @db.ObjectId
   mitigationPlan String?
@@ -66,6 +69,7 @@ model Questionnaire {
 
 model Application {
   ait            String?
+  assessments    Assessment[]
   createdAt      DateTime        @default(now())
   description    String?
   id             String          @id @default(auto()) @map("_id") @db.ObjectId
@@ -82,4 +86,15 @@ model QuestionsRIsk {
   risk       Risk?     @relation(fields: [RiskId], references: [id])
   RiskId     String?   @db.ObjectId
   updatedAt  DateTime  @updatedAt
+}
+
+model Assessment {
+  application   Application? @relation(fields: [applicationId], references: [id])
+  applicationId String?      @db.ObjectId
+  assessor      User?        @relation(fields: [AssessorID], references: [id])
+  AssessorID    String?      @unique @db.ObjectId
+  createdAt     DateTime     @default(now())
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  risks         Risk[]
+  updatedAt     DateTime     @updatedAt
 }

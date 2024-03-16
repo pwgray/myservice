@@ -28,6 +28,7 @@ import { UpdateRiskArgs } from "./UpdateRiskArgs";
 import { DeleteRiskArgs } from "./DeleteRiskArgs";
 import { QuestionsRIskFindManyArgs } from "../../questionsRIsk/base/QuestionsRIskFindManyArgs";
 import { QuestionsRIsk } from "../../questionsRIsk/base/QuestionsRIsk";
+import { Assessment } from "../../assessment/base/Assessment";
 import { RiskService } from "../risk.service";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Risk)
@@ -88,7 +89,15 @@ export class RiskResolverBase {
   async createRisk(@graphql.Args() args: CreateRiskArgs): Promise<Risk> {
     return await this.service.createRisk({
       ...args,
-      data: args.data,
+      data: {
+        ...args.data,
+
+        assessment: args.data.assessment
+          ? {
+              connect: args.data.assessment,
+            }
+          : undefined,
+      },
     });
   }
 
@@ -103,7 +112,15 @@ export class RiskResolverBase {
     try {
       return await this.service.updateRisk({
         ...args,
-        data: args.data,
+        data: {
+          ...args.data,
+
+          assessment: args.data.assessment
+            ? {
+                connect: args.data.assessment,
+              }
+            : undefined,
+        },
       });
     } catch (error) {
       if (isRecordNotFoundError(error)) {
@@ -152,5 +169,26 @@ export class RiskResolverBase {
     }
 
     return results;
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => Assessment, {
+    nullable: true,
+    name: "assessment",
+  })
+  @nestAccessControl.UseRoles({
+    resource: "Assessment",
+    action: "read",
+    possession: "any",
+  })
+  async getAssessment(
+    @graphql.Parent() parent: Risk
+  ): Promise<Assessment | null> {
+    const result = await this.service.getAssessment(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
   }
 }

@@ -4,13 +4,14 @@ import {
   Edit,
   SimpleForm,
   EditProps,
-  TextInput,
-  PasswordInput,
   ReferenceInput,
   SelectInput,
+  TextInput,
+  PasswordInput,
   SelectArrayInput,
 } from "react-admin";
 
+import { AssessmentTitle } from "../assessment/AssessmentTitle";
 import { QuestionTitle } from "../question/QuestionTitle";
 import { ROLES_OPTIONS } from "../user/RolesOptions";
 
@@ -18,6 +19,13 @@ export const UserEdit = (props: EditProps): React.ReactElement => {
   return (
     <Edit {...props}>
       <SimpleForm>
+        <ReferenceInput
+          source="assessments.id"
+          reference="Assessment"
+          label="Assessments"
+        >
+          <SelectInput optionText={AssessmentTitle} />
+        </ReferenceInput>
         <TextInput label="First Name" source="firstName" />
         <TextInput label="Last Name" source="lastName" />
         <PasswordInput label="Password" source="password" />

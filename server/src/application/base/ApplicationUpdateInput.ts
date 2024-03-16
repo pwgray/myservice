@@ -12,8 +12,9 @@ https://docs.amplication.com/how-to/custom-code
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString, IsOptional, ValidateNested } from "class-validator";
-import { QuestionnaireUpdateManyWithoutApplicationsInput } from "./QuestionnaireUpdateManyWithoutApplicationsInput";
+import { AssessmentUpdateManyWithoutApplicationsInput } from "./AssessmentUpdateManyWithoutApplicationsInput";
 import { Type } from "class-transformer";
+import { QuestionnaireUpdateManyWithoutApplicationsInput } from "./QuestionnaireUpdateManyWithoutApplicationsInput";
 
 @InputType()
 class ApplicationUpdateInput {
@@ -27,6 +28,18 @@ class ApplicationUpdateInput {
     nullable: true,
   })
   ait?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => AssessmentUpdateManyWithoutApplicationsInput,
+  })
+  @ValidateNested()
+  @Type(() => AssessmentUpdateManyWithoutApplicationsInput)
+  @IsOptional()
+  @Field(() => AssessmentUpdateManyWithoutApplicationsInput, {
+    nullable: true,
+  })
+  assessments?: AssessmentUpdateManyWithoutApplicationsInput;
 
   @ApiProperty({
     required: false,

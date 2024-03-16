@@ -11,12 +11,22 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsString, IsOptional, ValidateNested } from "class-validator";
+import { Assessment } from "../../assessment/base/Assessment";
+import { ValidateNested, IsOptional, IsDate, IsString } from "class-validator";
 import { Type } from "class-transformer";
 import { QuestionsRIsk } from "../../questionsRIsk/base/QuestionsRIsk";
 
 @ObjectType()
 class Risk {
+  @ApiProperty({
+    required: false,
+    type: () => Assessment,
+  })
+  @ValidateNested()
+  @Type(() => Assessment)
+  @IsOptional()
+  assessment?: Assessment | null;
+
   @ApiProperty({
     required: true,
   })

@@ -6,6 +6,7 @@ import { AnswerModule } from "./answer/answer.module";
 import { QuestionnaireModule } from "./questionnaire/questionnaire.module";
 import { ApplicationModule } from "./application/application.module";
 import { QuestionsRIskModule } from "./questionsRIsk/questionsRIsk.module";
+import { AssessmentModule } from "./assessment/assessment.module";
 import { HealthModule } from "./health/health.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { SecretsManagerModule } from "./providers/secrets/secretsManager.module";
@@ -30,6 +31,7 @@ import { AuthModule } from "./auth/auth.module";
     QuestionnaireModule,
     ApplicationModule,
     QuestionsRIskModule,
+    AssessmentModule,
     HealthModule,
     PrismaModule,
     SecretsManagerModule,

@@ -26,6 +26,7 @@ import { UserFindUniqueArgs } from "./UserFindUniqueArgs";
 import { CreateUserArgs } from "./CreateUserArgs";
 import { UpdateUserArgs } from "./UpdateUserArgs";
 import { DeleteUserArgs } from "./DeleteUserArgs";
+import { Assessment } from "../../assessment/base/Assessment";
 import { Question } from "../../question/base/Question";
 import { UserService } from "../user.service";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
@@ -90,6 +91,12 @@ export class UserResolverBase {
       data: {
         ...args.data,
 
+        assessments: args.data.assessments
+          ? {
+              connect: args.data.assessments,
+            }
+          : undefined,
+
         questions: args.data.questions
           ? {
               connect: args.data.questions,
@@ -112,6 +119,12 @@ export class UserResolverBase {
         ...args,
         data: {
           ...args.data,
+
+          assessments: args.data.assessments
+            ? {
+                connect: args.data.assessments,
+              }
+            : undefined,
 
           questions: args.data.questions
             ? {
@@ -147,6 +160,27 @@ export class UserResolverBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => Assessment, {
+    nullable: true,
+    name: "assessments",
+  })
+  @nestAccessControl.UseRoles({
+    resource: "Assessment",
+    action: "read",
+    possession: "any",
+  })
+  async getAssessments(
+    @graphql.Parent() parent: User
+  ): Promise<Assessment | null> {
+    const result = await this.service.getAssessments(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
