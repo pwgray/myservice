@@ -66,7 +66,7 @@ export class QuestionServiceBase {
       .answers(args);
   }
 
-  async findRIsks(
+  async findRisks(
     parentId: string,
     args: Prisma.QuestionsRIskFindManyArgs
   ): Promise<QuestionsRIsk[]> {
@@ -74,7 +74,7 @@ export class QuestionServiceBase {
       .findUniqueOrThrow({
         where: { id: parentId },
       })
-      .RIsks(args);
+      .Risks(args);
   }
 
   async getOwner(parentId: string): Promise<User | null> {

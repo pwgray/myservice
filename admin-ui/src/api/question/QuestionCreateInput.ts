@@ -9,6 +9,6 @@ export type QuestionCreateInput = {
   name?: string | null;
   owner?: UserWhereUniqueInput | null;
   questionnaire?: QuestionnaireWhereUniqueInput | null;
-  RIsks?: QuestionsRIskCreateNestedManyWithoutQuestionsInput;
+  Risks?: QuestionsRIskCreateNestedManyWithoutQuestionsInput;
   text?: string | null;
 };

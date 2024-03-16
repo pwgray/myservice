@@ -11,7 +11,7 @@ export type Question = {
   name: string | null;
   owner?: User | null;
   questionnaire?: Questionnaire | null;
-  RIsks?: Array<QuestionsRIsk>;
+  Risks?: Array<QuestionsRIsk>;
   text: string | null;
   updatedAt: Date;
 };

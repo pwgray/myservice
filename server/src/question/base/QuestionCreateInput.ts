@@ -88,7 +88,7 @@ class QuestionCreateInput {
   @Field(() => QuestionsRIskCreateNestedManyWithoutQuestionsInput, {
     nullable: true,
   })
-  RIsks?: QuestionsRIskCreateNestedManyWithoutQuestionsInput;
+  Risks?: QuestionsRIskCreateNestedManyWithoutQuestionsInput;
 
   @ApiProperty({
     required: false,

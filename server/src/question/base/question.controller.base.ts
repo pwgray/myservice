@@ -401,19 +401,19 @@ export class QuestionControllerBase {
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
-  @common.Get("/:id/RIsks")
+  @common.Get("/:id/Risks")
   @ApiNestedQuery(QuestionsRIskFindManyArgs)
   @nestAccessControl.UseRoles({
     resource: "QuestionsRIsk",
     action: "read",
     possession: "any",
   })
-  async findRIsks(
+  async findRisks(
     @common.Req() request: Request,
     @common.Param() params: QuestionWhereUniqueInput
   ): Promise<QuestionsRIsk[]> {
     const query = plainToClass(QuestionsRIskFindManyArgs, request.query);
-    const results = await this.service.findRIsks(params.id, {
+    const results = await this.service.findRisks(params.id, {
       ...query,
       select: {
         createdAt: true,
@@ -442,18 +442,18 @@ export class QuestionControllerBase {
     return results;
   }
 
-  @common.Post("/:id/RIsks")
+  @common.Post("/:id/Risks")
   @nestAccessControl.UseRoles({
     resource: "Question",
     action: "update",
     possession: "any",
   })
-  async connectRIsks(
+  async connectRisks(
     @common.Param() params: QuestionWhereUniqueInput,
     @common.Body() body: QuestionsRIskWhereUniqueInput[]
   ): Promise<void> {
     const data = {
-      RIsks: {
+      Risks: {
         connect: body,
       },
     };
@@ -464,18 +464,18 @@ export class QuestionControllerBase {
     });
   }
 
-  @common.Patch("/:id/RIsks")
+  @common.Patch("/:id/Risks")
   @nestAccessControl.UseRoles({
     resource: "Question",
     action: "update",
     possession: "any",
   })
-  async updateRIsks(
+  async updateRisks(
     @common.Param() params: QuestionWhereUniqueInput,
     @common.Body() body: QuestionsRIskWhereUniqueInput[]
   ): Promise<void> {
     const data = {
-      RIsks: {
+      Risks: {
         set: body,
       },
     };
@@ -486,18 +486,18 @@ export class QuestionControllerBase {
     });
   }
 
-  @common.Delete("/:id/RIsks")
+  @common.Delete("/:id/Risks")
   @nestAccessControl.UseRoles({
     resource: "Question",
     action: "update",
     possession: "any",
   })
-  async disconnectRIsks(
+  async disconnectRisks(
     @common.Param() params: QuestionWhereUniqueInput,
     @common.Body() body: QuestionsRIskWhereUniqueInput[]
   ): Promise<void> {
     const data = {
-      RIsks: {
+      Risks: {
         disconnect: body,
       },
     };

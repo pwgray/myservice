@@ -41,7 +41,7 @@ export const QuestionCreate = (props: CreateProps): React.ReactElement => {
           <SelectInput optionText={QuestionnaireTitle} />
         </ReferenceInput>
         <ReferenceArrayInput
-          source="RIsks"
+          source="Risks"
           reference="QuestionsRIsk"
           parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
           format={(value: any) => value && value.map((v: any) => v.id)}

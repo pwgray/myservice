@@ -197,17 +197,17 @@ export class QuestionResolverBase {
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.ResolveField(() => [QuestionsRIsk], { name: "rIsks" })
+  @graphql.ResolveField(() => [QuestionsRIsk], { name: "risks" })
   @nestAccessControl.UseRoles({
     resource: "QuestionsRIsk",
     action: "read",
     possession: "any",
   })
-  async findRIsks(
+  async findRisks(
     @graphql.Parent() parent: Question,
     @graphql.Args() args: QuestionsRIskFindManyArgs
   ): Promise<QuestionsRIsk[]> {
-    const results = await this.service.findRIsks(parent.id, args);
+    const results = await this.service.findRisks(parent.id, args);
 
     if (!results) {
       return [];

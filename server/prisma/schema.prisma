@@ -29,7 +29,7 @@ model Question {
   OwnerId         String?         @unique @db.ObjectId
   questionnaire   Questionnaire?  @relation(fields: [QuestionnaireId], references: [id])
   QuestionnaireId String?         @db.ObjectId
-  RIsks           QuestionsRIsk[]
+  Risks           QuestionsRIsk[]
   text            String?
   updatedAt       DateTime        @updatedAt
 }

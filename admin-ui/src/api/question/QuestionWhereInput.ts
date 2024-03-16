@@ -12,6 +12,6 @@ export type QuestionWhereInput = {
   name?: StringNullableFilter;
   owner?: UserWhereUniqueInput;
   questionnaire?: QuestionnaireWhereUniqueInput;
-  RIsks?: QuestionsRIskListRelationFilter;
+  Risks?: QuestionsRIskListRelationFilter;
   text?: StringNullableFilter;
 };
